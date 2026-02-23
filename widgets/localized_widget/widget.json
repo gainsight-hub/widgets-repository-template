@@ -1,0 +1,64 @@
+{
+  "version": "1.0.0",
+  "title": "Localized Widget",
+  "description": "A multi-language widget with automatic locale discovery. Detects the user's language from the page and renders localized content — no duplicate pages needed.",
+  "category": "Content",
+  "imageSrc": "thumbnail.png",
+  "configuration": {
+    "properties": [
+      {
+        "name": "fallback_locale",
+        "type": "select",
+        "label": "Fallback Language",
+        "defaultValue": "en",
+        "options": [
+          { "value": "en", "label": "English" },
+          { "value": "es", "label": "Español" },
+          { "value": "fr", "label": "Français" },
+          { "value": "de", "label": "Deutsch" },
+          { "value": "pt", "label": "Português" },
+          { "value": "ja", "label": "日本語" }
+        ]
+      },
+      {
+        "name": "accent_color",
+        "type": "color",
+        "label": "Accent Color",
+        "defaultValue": "#6366f1"
+      },
+      {
+        "name": "card_background",
+        "type": "color",
+        "label": "Card Background",
+        "defaultValue": "#ffffff"
+      },
+      {
+        "name": "text_color",
+        "type": "color",
+        "label": "Text Color",
+        "defaultValue": "#1e293b"
+      },
+      {
+        "name": "show_locale_badge",
+        "type": "select",
+        "label": "Show Detected Locale Badge",
+        "defaultValue": "yes",
+        "options": [
+          { "value": "yes", "label": "Yes" },
+          { "value": "no", "label": "No" }
+        ]
+      }
+    ]
+  },
+  "defaultConfig": {
+    "fallback_locale": "en",
+    "accent_color": "#6366f1",
+    "card_background": "#ffffff",
+    "text_color": "#1e293b",
+    "show_locale_badge": "yes"
+  },
+  "source": {
+    "path": "dist",
+    "entry": "content.html"
+  }
+}

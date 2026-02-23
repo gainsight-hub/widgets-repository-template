@@ -1,0 +1,296 @@
+<style>
+  .lw-root {
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    padding: 24px;
+    color: {{ text_color }};
+  }
+
+  .lw-card {
+    background: {{ card_background }};
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.08), 0 4px 14px rgba(0,0,0,.04);
+    padding: 32px;
+    max-width: 640px;
+  }
+
+  .lw-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .lw-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: {{ accent_color }};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+
+  .lw-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  .lw-badge {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    background: {{ accent_color }};
+    color: #fff;
+    padding: 3px 8px;
+    border-radius: 6px;
+    margin-left: auto;
+    white-space: nowrap;
+  }
+
+  .lw-badge-hidden {
+    display: none;
+  }
+
+  .lw-body {
+    font-size: 15px;
+    line-height: 1.65;
+    margin-bottom: 24px;
+    opacity: .85;
+  }
+
+  .lw-steps {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .lw-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .lw-step-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: {{ accent_color }};
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .lw-step-text {
+    font-size: 15px;
+    line-height: 1.55;
+    padding-top: 3px;
+  }
+
+  .lw-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: {{ accent_color }};
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: opacity .15s ease;
+  }
+
+  .lw-cta:hover {
+    opacity: .88;
+  }
+
+  .lw-footer {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(0,0,0,.06);
+    font-size: 12px;
+    opacity: .5;
+  }
+
+  @media (max-width: 480px) {
+    .lw-root { padding: 16px; }
+    .lw-card { padding: 20px; }
+    .lw-title { font-size: 18px; }
+  }
+</style>
+
+<div class="lw-root">
+  <div class="lw-card">
+    <div class="lw-header">
+      <div class="lw-icon">🌐</div>
+      <h2 class="lw-title" data-i18n="title"></h2>
+      <span class="lw-badge" data-i18n-badge></span>
+    </div>
+    <p class="lw-body" data-i18n="body"></p>
+    <ol class="lw-steps">
+      <li class="lw-step">
+        <span class="lw-step-num">1</span>
+        <span class="lw-step-text" data-i18n="step1"></span>
+      </li>
+      <li class="lw-step">
+        <span class="lw-step-num">2</span>
+        <span class="lw-step-text" data-i18n="step2"></span>
+      </li>
+      <li class="lw-step">
+        <span class="lw-step-num">3</span>
+        <span class="lw-step-text" data-i18n="step3"></span>
+      </li>
+    </ol>
+    <a href="#" class="lw-cta" data-i18n="cta"></a>
+    <div class="lw-footer" data-i18n="footer"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var TRANSLATIONS = {
+    en: {
+      title: "Welcome to Our Community",
+      body: "We're glad you're here! This community is your space to ask questions, share ideas, and connect with other members. Here's how to get started:",
+      step1: "Complete your profile so others can get to know you.",
+      step2: "Browse popular topics and join the conversations that interest you.",
+      step3: "Post your first question or share an idea — the community is here to help.",
+      cta: "Explore Topics →",
+      footer: "Content displayed in your detected language."
+    },
+    es: {
+      title: "Bienvenido a Nuestra Comunidad",
+      body: "¡Nos alegra que estés aquí! Esta comunidad es tu espacio para hacer preguntas, compartir ideas y conectar con otros miembros. Así es como puedes empezar:",
+      step1: "Completa tu perfil para que otros te conozcan.",
+      step2: "Explora los temas populares y únete a las conversaciones que te interesen.",
+      step3: "Publica tu primera pregunta o comparte una idea — la comunidad está aquí para ayudarte.",
+      cta: "Explorar Temas →",
+      footer: "Contenido mostrado en tu idioma detectado."
+    },
+    fr: {
+      title: "Bienvenue dans Notre Communauté",
+      body: "Nous sommes ravis de vous accueillir ! Cette communauté est votre espace pour poser des questions, partager des idées et échanger avec d'autres membres. Voici comment commencer :",
+      step1: "Complétez votre profil pour que les autres puissent faire votre connaissance.",
+      step2: "Parcourez les sujets populaires et rejoignez les conversations qui vous intéressent.",
+      step3: "Publiez votre première question ou partagez une idée — la communauté est là pour vous aider.",
+      cta: "Explorer les Sujets →",
+      footer: "Contenu affiché dans votre langue détectée."
+    },
+    de: {
+      title: "Willkommen in Unserer Community",
+      body: "Schön, dass Sie hier sind! Diese Community ist Ihr Raum, um Fragen zu stellen, Ideen zu teilen und sich mit anderen Mitgliedern zu vernetzen. So starten Sie:",
+      step1: "Vervollständigen Sie Ihr Profil, damit andere Sie kennenlernen können.",
+      step2: "Entdecken Sie beliebte Themen und beteiligen Sie sich an Gesprächen, die Sie interessieren.",
+      step3: "Stellen Sie Ihre erste Frage oder teilen Sie eine Idee — die Community ist da, um zu helfen.",
+      cta: "Themen Entdecken →",
+      footer: "Inhalt wird in Ihrer erkannten Sprache angezeigt."
+    },
+    pt: {
+      title: "Bem-vindo à Nossa Comunidade",
+      body: "Estamos felizes por você estar aqui! Esta comunidade é o seu espaço para fazer perguntas, compartilhar ideias e se conectar com outros membros. Veja como começar:",
+      step1: "Complete seu perfil para que outros possam conhecê-lo.",
+      step2: "Explore os tópicos populares e participe das conversas que te interessam.",
+      step3: "Publique sua primeira pergunta ou compartilhe uma ideia — a comunidade está aqui para ajudar.",
+      cta: "Explorar Tópicos →",
+      footer: "Conteúdo exibido no seu idioma detectado."
+    },
+    ja: {
+      title: "コミュニティへようこそ",
+      body: "ご参加いただきありがとうございます！このコミュニティは、質問をしたり、アイデアを共有したり、他のメンバーとつながるための場所です。始め方をご案内します：",
+      step1: "プロフィールを完成させて、他のメンバーに自己紹介しましょう。",
+      step2: "人気のトピックを閲覧し、興味のある会話に参加しましょう。",
+      step3: "最初の質問を投稿するか、アイデアを共有しましょう。コミュニティがお手伝いします。",
+      cta: "トピックを探す →",
+      footer: "検出された言語でコンテンツを表示しています。"
+    }
+  };
+
+  var SUPPORTED = Object.keys(TRANSLATIONS);
+
+  function normalizeLocale(raw) {
+    if (!raw) return null;
+    var code = raw.trim().toLowerCase().replace(/_/g, "-").split("-")[0];
+    return SUPPORTED.indexOf(code) !== -1 ? code : null;
+  }
+
+  function detectFromHtmlLang() {
+    var el = document.documentElement || document.querySelector("html");
+    return el ? normalizeLocale(el.getAttribute("lang")) : null;
+  }
+
+  function detectFromMeta() {
+    var meta =
+      document.querySelector('meta[http-equiv="content-language"]') ||
+      document.querySelector('meta[name="language"]') ||
+      document.querySelector('meta[property="og:locale"]');
+    return meta ? normalizeLocale(meta.getAttribute("content")) : null;
+  }
+
+  function detectFromUrl() {
+    var segments = window.location.pathname.split("/").filter(Boolean);
+    for (var i = 0; i < Math.min(segments.length, 2); i++) {
+      var match = normalizeLocale(segments[i]);
+      if (match) return match;
+    }
+    var params = new URLSearchParams(window.location.search);
+    return (
+      normalizeLocale(params.get("lang")) ||
+      normalizeLocale(params.get("locale")) ||
+      normalizeLocale(params.get("hl"))
+    );
+  }
+
+  function detectFromNavigator() {
+    var langs = navigator.languages || [navigator.language || navigator.userLanguage];
+    for (var i = 0; i < langs.length; i++) {
+      var match = normalizeLocale(langs[i]);
+      if (match) return match;
+    }
+    return null;
+  }
+
+  var fallback = "{{ fallback_locale }}";
+  var showBadge = "{{ show_locale_badge }}" === "yes";
+
+  var detected =
+    detectFromHtmlLang() ||
+    detectFromMeta() ||
+    detectFromUrl() ||
+    detectFromNavigator() ||
+    normalizeLocale(fallback) ||
+    "en";
+
+  var strings = TRANSLATIONS[detected] || TRANSLATIONS["en"];
+
+  var root = document.currentScript
+    ? document.currentScript.parentElement
+    : document.querySelector(".lw-root").parentElement;
+
+  var els = root.querySelectorAll("[data-i18n]");
+  for (var i = 0; i < els.length; i++) {
+    var key = els[i].getAttribute("data-i18n");
+    if (strings[key]) els[i].textContent = strings[key];
+  }
+
+  var badge = root.querySelector("[data-i18n-badge]");
+  if (badge) {
+    badge.textContent = detected.toUpperCase();
+    if (!showBadge) badge.classList.add("lw-badge-hidden");
+  }
+})();
+</script>

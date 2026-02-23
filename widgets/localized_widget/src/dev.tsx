@@ -1,12 +1,8 @@
 import { init } from "./main";
 import type { WidgetSDK } from "./types";
 
-const mockSDK: WidgetSDK = {
+init({
   whenReady: () => Promise.resolve(),
-  shadowRoot: document.getElementById("widget-root")!,
-  getProps: () => ({}),
+  shadowRoot: document.getElementById("widget-root")! as unknown as ShadowRoot,
   on: () => () => {},
-  emit: () => {},
-};
-
-init(mockSDK);
+});

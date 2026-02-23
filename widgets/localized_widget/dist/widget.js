@@ -1,6 +1,6 @@
-import { jsx as o, jsxs as i } from "react/jsx-runtime";
-import { createRoot as c } from "react-dom/client";
-const p = ["en", "es", "fr", "de", "pt"], a = {
+import { jsx as o, jsxs as n } from "react/jsx-runtime";
+import { createRoot as s } from "react-dom/client";
+const a = {
   en: {
     title: "Welcome to Our Community",
     body: "We’re glad you’re here! This community is your space to ask questions, share ideas, and connect with other members. Here’s how to get started:",
@@ -47,48 +47,46 @@ const p = ["en", "es", "fr", "de", "pt"], a = {
     footer: "Conteúdo exibido no seu idioma detectado."
   }
 };
-function s(t) {
-  if (!t) return null;
-  const e = t.trim().toLowerCase().split(/[-_]/)[0];
-  return p.includes(e) ? e : null;
+function d(e) {
+  return a[e] ?? a.en;
 }
-function u() {
-  return s(document.documentElement.lang) ?? s(new URLSearchParams(window.location.search).get("lang")) ?? "en";
+function l() {
+  const e = document.documentElement.lang || new URLSearchParams(window.location.search).get("lang"), t = e == null ? void 0 : e.trim().toLowerCase().split(/[-_]/)[0];
+  return t && t in a ? t : "en";
 }
-function m() {
-  const t = u(), e = a[t] ?? a.en;
-  return { locale: t, strings: e };
+const i = "#6366f1";
+function p({ children: e }) {
+  return /* @__PURE__ */ o("span", { style: { fontSize: 11, fontWeight: 600, letterSpacing: ".04em", textTransform: "uppercase", background: i, color: "#fff", padding: "3px 8px", borderRadius: 6, marginLeft: "auto" }, children: e });
 }
-const n = "#6366f1";
-function f() {
-  const { locale: t, strings: e } = m(), l = [e.step1, e.step2, e.step3];
-  return /* @__PURE__ */ o("div", { style: { fontFamily: "system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif", padding: 24, color: "#1e293b" }, children: /* @__PURE__ */ i("div", { style: { background: "#fff", borderRadius: 12, boxShadow: "0 1px 3px rgba(0,0,0,.08), 0 4px 14px rgba(0,0,0,.04)", padding: 32, maxWidth: 640 }, children: [
-    /* @__PURE__ */ i("div", { style: { display: "flex", alignItems: "center", gap: 12, marginBottom: 20 }, children: [
-      /* @__PURE__ */ o("div", { style: { width: 44, height: 44, borderRadius: 10, background: n, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22, flexShrink: 0 }, children: "🌐" }),
-      /* @__PURE__ */ o("h2", { style: { fontSize: 22, fontWeight: 700, margin: 0, lineHeight: 1.3 }, children: e.title }),
-      /* @__PURE__ */ o("span", { style: { fontSize: 11, fontWeight: 600, letterSpacing: ".04em", textTransform: "uppercase", background: n, color: "#fff", padding: "3px 8px", borderRadius: 6, marginLeft: "auto", whiteSpace: "nowrap" }, children: t })
+function r({ n: e, text: t }) {
+  return /* @__PURE__ */ n("li", { style: { display: "flex", alignItems: "flex-start", gap: 12 }, children: [
+    /* @__PURE__ */ o("span", { style: { width: 28, height: 28, borderRadius: "50%", background: i, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 700, flexShrink: 0 }, children: e }),
+    /* @__PURE__ */ o("span", { style: { fontSize: 15, lineHeight: 1.55, paddingTop: 3 }, children: t })
+  ] });
+}
+function c() {
+  const e = l(), t = d(e);
+  return /* @__PURE__ */ o("div", { style: { fontFamily: "system-ui, -apple-system, sans-serif", padding: 24, color: "#1e293b" }, children: /* @__PURE__ */ n("div", { style: { background: "#fff", borderRadius: 12, boxShadow: "0 1px 3px rgba(0,0,0,.08), 0 4px 14px rgba(0,0,0,.04)", padding: 32, maxWidth: 640 }, children: [
+    /* @__PURE__ */ n("div", { style: { display: "flex", alignItems: "center", gap: 12, marginBottom: 20 }, children: [
+      /* @__PURE__ */ o("div", { style: { width: 44, height: 44, borderRadius: 10, background: i, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22, flexShrink: 0 }, children: "🌐" }),
+      /* @__PURE__ */ o("h2", { style: { fontSize: 22, fontWeight: 700, margin: 0 }, children: t.title }),
+      /* @__PURE__ */ o(p, { children: e })
     ] }),
-    /* @__PURE__ */ o("p", { style: { fontSize: 15, lineHeight: 1.65, marginBottom: 24, opacity: 0.85, marginTop: 0 }, children: e.body }),
-    /* @__PURE__ */ o("ol", { style: { listStyle: "none", padding: 0, margin: "0 0 24px", display: "flex", flexDirection: "column", gap: 12 }, children: l.map((d, r) => /* @__PURE__ */ i("li", { style: { display: "flex", alignItems: "flex-start", gap: 12 }, children: [
-      /* @__PURE__ */ o("span", { style: { width: 28, height: 28, borderRadius: "50%", background: n, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 700, flexShrink: 0, marginTop: 1 }, children: r + 1 }),
-      /* @__PURE__ */ o("span", { style: { fontSize: 15, lineHeight: 1.55, paddingTop: 3 }, children: d })
-    ] }, r)) }),
-    /* @__PURE__ */ o(
-      "a",
-      {
-        href: "#",
-        style: { display: "inline-flex", alignItems: "center", gap: 6, background: n, color: "#fff", fontSize: 14, fontWeight: 600, padding: "10px 20px", borderRadius: 8, border: "none", cursor: "pointer", textDecoration: "none" },
-        children: e.cta
-      }
-    ),
-    /* @__PURE__ */ o("div", { style: { marginTop: 20, paddingTop: 16, borderTop: "1px solid rgba(0,0,0,.06)", fontSize: 12, opacity: 0.5 }, children: e.footer })
+    /* @__PURE__ */ o("p", { style: { fontSize: 15, lineHeight: 1.65, marginBottom: 24, opacity: 0.85, marginTop: 0 }, children: t.body }),
+    /* @__PURE__ */ n("ol", { style: { listStyle: "none", padding: 0, margin: "0 0 24px", display: "flex", flexDirection: "column", gap: 12 }, children: [
+      /* @__PURE__ */ o(r, { n: 1, text: t.step1 }),
+      /* @__PURE__ */ o(r, { n: 2, text: t.step2 }),
+      /* @__PURE__ */ o(r, { n: 3, text: t.step3 })
+    ] }),
+    /* @__PURE__ */ o("a", { href: "#", style: { display: "inline-flex", background: i, color: "#fff", fontSize: 14, fontWeight: 600, padding: "10px 20px", borderRadius: 8, textDecoration: "none" }, children: t.cta }),
+    /* @__PURE__ */ o("div", { style: { marginTop: 20, paddingTop: 16, borderTop: "1px solid rgba(0,0,0,.06)", fontSize: 12, opacity: 0.5 }, children: t.footer })
   ] }) });
 }
-async function y(t) {
-  await t.whenReady();
-  const e = c(t.shadowRoot);
-  e.render(/* @__PURE__ */ o(f, {})), t.on("destroy", () => e.unmount());
+async function f(e) {
+  await e.whenReady();
+  const t = s(e.shadowRoot);
+  t.render(/* @__PURE__ */ o(c, {})), e.on("destroy", () => t.unmount());
 }
 export {
-  y as init
+  f as init
 };

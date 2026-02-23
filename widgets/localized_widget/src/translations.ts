@@ -1,8 +1,6 @@
-import type { Translations, Locale } from "./types";
+import type { Locale } from "./types";
 
-export const SUPPORTED_LOCALES: Locale[] = ["en", "es", "fr", "de", "pt"];
-
-export const TRANSLATIONS: Translations = {
+const T: Record<Locale, Record<string, string>> = {
   en: {
     title: "Welcome to Our Community",
     body: "We\u2019re glad you\u2019re here! This community is your space to ask questions, share ideas, and connect with other members. Here\u2019s how to get started:",
@@ -49,3 +47,13 @@ export const TRANSLATIONS: Translations = {
     footer: "Conte\u00fado exibido no seu idioma detectado.",
   },
 };
+
+export function getStrings(locale: Locale) {
+  return T[locale] ?? T.en;
+}
+
+export function resolveLocale(): Locale {
+  const raw = document.documentElement.lang || new URLSearchParams(window.location.search).get("lang");
+  const code = raw?.trim().toLowerCase().split(/[-_]/)[0] as Locale | undefined;
+  return code && code in T ? code : "en";
+}

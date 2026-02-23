@@ -279,7 +279,9 @@
 
   var root = document.currentScript
     ? document.currentScript.parentElement
-    : document.querySelector(".lw-root").parentElement;
+    : document.querySelector(".lw-root");
+
+  if (!root) return;
 
   var els = root.querySelectorAll("[data-i18n]");
   for (var i = 0; i < els.length; i++) {

@@ -134,26 +134,26 @@
   <div class="lw-card">
     <div class="lw-header">
       <div class="lw-icon">🌐</div>
-      <h2 class="lw-title" data-i18n="title"></h2>
-      <span class="lw-badge" data-i18n="badge"></span>
+      <h2 class="lw-title" data-i18n="title">Welcome to Our Community</h2>
+      <span class="lw-badge" data-i18n="badge">{{ fallback_locale }}</span>
     </div>
-    <p class="lw-body" data-i18n="body"></p>
+    <p class="lw-body" data-i18n="body">We're glad you're here! This community is your space to ask questions, share ideas, and connect with other members. Here's how to get started:</p>
     <ol class="lw-steps">
       <li class="lw-step">
         <span class="lw-step-num">1</span>
-        <span class="lw-step-text" data-i18n="step1"></span>
+        <span class="lw-step-text" data-i18n="step1">Complete your profile so others can get to know you.</span>
       </li>
       <li class="lw-step">
         <span class="lw-step-num">2</span>
-        <span class="lw-step-text" data-i18n="step2"></span>
+        <span class="lw-step-text" data-i18n="step2">Browse popular topics and join the conversations that interest you.</span>
       </li>
       <li class="lw-step">
         <span class="lw-step-num">3</span>
-        <span class="lw-step-text" data-i18n="step3"></span>
+        <span class="lw-step-text" data-i18n="step3">Post your first question or share an idea — the community is here to help.</span>
       </li>
     </ol>
-    <a href="#" class="lw-cta" data-i18n="cta"></a>
-    <div class="lw-footer" data-i18n="footer"></div>
+    <a href="#" class="lw-cta" data-i18n="cta">Explore Topics →</a>
+    <div class="lw-footer" data-i18n="footer">Content displayed in your detected language.</div>
   </div>
 </div>
 
@@ -216,8 +216,8 @@
   }
 
   function detect() {
-    var el = document.documentElement;
-    if (el && normalize(el.getAttribute("lang"))) return normalize(el.getAttribute("lang"));
+    var html = document.documentElement;
+    if (html && normalize(html.getAttribute("lang"))) return normalize(html.getAttribute("lang"));
 
     var meta =
       document.querySelector('meta[http-equiv="content-language"]') ||
@@ -241,9 +241,13 @@
     return null;
   }
 
-  var root = document.currentScript
-    ? document.currentScript.previousElementSibling
-    : document.querySelector(".lw-root");
+  var scope = document.currentScript
+    ? document.currentScript.getRootNode()
+    : document;
+
+  var root = scope.querySelector
+    ? scope.querySelector(".lw-root")
+    : null;
 
   if (!root) return;
 

@@ -3,40 +3,20 @@ import type { Locale, TranslationStrings } from "./types";
 
 function normalize(raw: string | null | undefined): Locale | null {
   if (!raw) return null;
-  const code = raw.trim().toLowerCase().replace(/_/g, "-").split("-")[0];
+  const code = raw.trim().toLowerCase().split(/[-_]/)[0];
   return SUPPORTED_LOCALES.includes(code as Locale) ? (code as Locale) : null;
 }
 
-function detectFromPage(): Locale | null {
-  const htmlLang = document.documentElement?.getAttribute("lang");
-  if (normalize(htmlLang)) return normalize(htmlLang);
-
-  const meta =
-    document.querySelector('meta[http-equiv="content-language"]') ??
-    document.querySelector('meta[name="language"]') ??
-    document.querySelector('meta[property="og:locale"]');
-  if (meta && normalize(meta.getAttribute("content")))
-    return normalize(meta.getAttribute("content"));
-
-  const segs = window.location.pathname.split("/").filter(Boolean);
-  for (let i = 0; i < Math.min(segs.length, 2); i++) {
-    if (normalize(segs[i])) return normalize(segs[i]);
-  }
-
-  const params = new URLSearchParams(window.location.search);
+function detectLocale(): Locale {
   return (
-    normalize(params.get("lang")) ??
-    normalize(params.get("locale")) ??
-    normalize(params.get("hl"))
+    normalize(document.documentElement.lang) ??
+    normalize(new URLSearchParams(window.location.search).get("lang")) ??
+    "en"
   );
 }
 
-export function useLocale(fallback: Locale = "en"): {
-  locale: Locale;
-  strings: TranslationStrings;
-} {
-  const pageLocale = detectFromPage();
-  const locale = pageLocale ?? fallback;
+export function useLocale(): { locale: Locale; strings: TranslationStrings } {
+  const locale = detectLocale();
   const strings = TRANSLATIONS[locale] ?? TRANSLATIONS.en;
   return { locale, strings };
 }

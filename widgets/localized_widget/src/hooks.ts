@@ -8,7 +8,7 @@ function normalize(raw: string | null | undefined): Locale | null {
   return SUPPORTED_LOCALES.includes(code as Locale) ? (code as Locale) : null;
 }
 
-function detectLocale(): Locale | null {
+function detectFromPage(): Locale | null {
   const htmlLang = document.documentElement?.getAttribute("lang");
   if (normalize(htmlLang)) return normalize(htmlLang);
 
@@ -25,26 +25,19 @@ function detectLocale(): Locale | null {
   }
 
   const params = new URLSearchParams(window.location.search);
-  const qp =
+  return (
     normalize(params.get("lang")) ??
     normalize(params.get("locale")) ??
-    normalize(params.get("hl"));
-  if (qp) return qp;
-
-  const langs = navigator.languages ?? [navigator.language];
-  for (const lang of langs) {
-    if (normalize(lang)) return normalize(lang);
-  }
-
-  return null;
+    normalize(params.get("hl"))
+  );
 }
 
 export function useLocale(fallback: Locale): {
   locale: Locale;
   strings: TranslationStrings;
 } {
-  const detected = detectLocale();
-  const locale = detected ?? fallback;
+  const pageLocale = detectFromPage();
+  const locale = pageLocale ?? fallback;
   const strings = TRANSLATIONS[locale] ?? TRANSLATIONS[fallback] ?? TRANSLATIONS.en;
   return { locale, strings };
 }

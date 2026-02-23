@@ -1,4 +1,4 @@
-import { jsx as n, jsxs as d } from "react/jsx-runtime";
+import { jsx as o, jsxs as l } from "react/jsx-runtime";
 import { createRoot as h } from "react-dom/client";
 import { useState as y, useEffect as b } from "react";
 const S = ["en", "es", "fr", "de", "pt"], p = {
@@ -48,64 +48,60 @@ const S = ["en", "es", "fr", "de", "pt"], p = {
     footer: "Conteúdo exibido no seu idioma detectado."
   }
 };
-function o(e) {
+function a(e) {
   if (!e) return null;
   const t = e.trim().toLowerCase().replace(/_/g, "-").split("-")[0];
   return S.includes(t) ? t : null;
 }
 function x() {
-  var l;
-  const e = (l = document.documentElement) == null ? void 0 : l.getAttribute("lang");
-  if (o(e)) return o(e);
+  var c;
+  const e = (c = document.documentElement) == null ? void 0 : c.getAttribute("lang");
+  if (a(e)) return a(e);
   const t = document.querySelector('meta[http-equiv="content-language"]') ?? document.querySelector('meta[name="language"]') ?? document.querySelector('meta[property="og:locale"]');
-  if (t && o(t.getAttribute("content")))
-    return o(t.getAttribute("content"));
-  const r = window.location.pathname.split("/").filter(Boolean);
-  for (let i = 0; i < Math.min(r.length, 2); i++)
-    if (o(r[i])) return o(r[i]);
-  const a = new URLSearchParams(window.location.search), c = o(a.get("lang")) ?? o(a.get("locale")) ?? o(a.get("hl"));
-  if (c) return c;
-  const u = navigator.languages ?? [navigator.language];
-  for (const i of u)
-    if (o(i)) return o(i);
-  return null;
+  if (t && a(t.getAttribute("content")))
+    return a(t.getAttribute("content"));
+  const n = window.location.pathname.split("/").filter(Boolean);
+  for (let s = 0; s < Math.min(n.length, 2); s++)
+    if (a(n[s])) return a(n[s]);
+  const r = new URLSearchParams(window.location.search);
+  return a(r.get("lang")) ?? a(r.get("locale")) ?? a(r.get("hl"));
 }
 function v(e) {
-  const r = x() ?? e, a = p[r] ?? p[e] ?? p.en;
-  return { locale: r, strings: a };
+  const n = x() ?? e, r = p[n] ?? p[e] ?? p.en;
+  return { locale: n, strings: r };
 }
 function z(e) {
-  const [t, r] = y(e.getProps());
-  return b(() => e.on("propsChanged", r), [e]), t;
+  const [t, n] = y(e.getProps());
+  return b(() => e.on("propsChanged", n), [e]), t;
 }
 function C({ sdk: e }) {
-  const t = z(e), r = t.fallback_locale || "en", a = t.accent_color || "#6366f1", c = t.card_background || "#ffffff", u = t.text_color || "#1e293b", l = t.show_locale_badge !== "no", { locale: i, strings: s } = v(r), g = [s.step1, s.step2, s.step3];
-  return /* @__PURE__ */ n("div", { style: { fontFamily: "system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif", padding: 24, color: u }, children: /* @__PURE__ */ d("div", { style: { background: c, borderRadius: 12, boxShadow: "0 1px 3px rgba(0,0,0,.08), 0 4px 14px rgba(0,0,0,.04)", padding: 32, maxWidth: 640 }, children: [
-    /* @__PURE__ */ d("div", { style: { display: "flex", alignItems: "center", gap: 12, marginBottom: 20 }, children: [
-      /* @__PURE__ */ n("div", { style: { width: 44, height: 44, borderRadius: 10, background: a, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22, flexShrink: 0 }, children: "🌐" }),
-      /* @__PURE__ */ n("h2", { style: { fontSize: 22, fontWeight: 700, margin: 0, lineHeight: 1.3 }, children: s.title }),
-      l && /* @__PURE__ */ n("span", { style: { fontSize: 11, fontWeight: 600, letterSpacing: ".04em", textTransform: "uppercase", background: a, color: "#fff", padding: "3px 8px", borderRadius: 6, marginLeft: "auto", whiteSpace: "nowrap" }, children: i })
+  const t = z(e), n = t.fallback_locale || "en", r = t.accent_color || "#6366f1", c = t.card_background || "#ffffff", s = t.text_color || "#1e293b", d = t.show_locale_badge !== "no", { locale: m, strings: i } = v(n), g = [i.step1, i.step2, i.step3];
+  return /* @__PURE__ */ o("div", { style: { fontFamily: "system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif", padding: 24, color: s }, children: /* @__PURE__ */ l("div", { style: { background: c, borderRadius: 12, boxShadow: "0 1px 3px rgba(0,0,0,.08), 0 4px 14px rgba(0,0,0,.04)", padding: 32, maxWidth: 640 }, children: [
+    /* @__PURE__ */ l("div", { style: { display: "flex", alignItems: "center", gap: 12, marginBottom: 20 }, children: [
+      /* @__PURE__ */ o("div", { style: { width: 44, height: 44, borderRadius: 10, background: r, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22, flexShrink: 0 }, children: "🌐" }),
+      /* @__PURE__ */ o("h2", { style: { fontSize: 22, fontWeight: 700, margin: 0, lineHeight: 1.3 }, children: i.title }),
+      d && /* @__PURE__ */ o("span", { style: { fontSize: 11, fontWeight: 600, letterSpacing: ".04em", textTransform: "uppercase", background: r, color: "#fff", padding: "3px 8px", borderRadius: 6, marginLeft: "auto", whiteSpace: "nowrap" }, children: m })
     ] }),
-    /* @__PURE__ */ n("p", { style: { fontSize: 15, lineHeight: 1.65, marginBottom: 24, opacity: 0.85, marginTop: 0 }, children: s.body }),
-    /* @__PURE__ */ n("ol", { style: { listStyle: "none", padding: 0, margin: "0 0 24px", display: "flex", flexDirection: "column", gap: 12 }, children: g.map((f, m) => /* @__PURE__ */ d("li", { style: { display: "flex", alignItems: "flex-start", gap: 12 }, children: [
-      /* @__PURE__ */ n("span", { style: { width: 28, height: 28, borderRadius: "50%", background: a, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 700, flexShrink: 0, marginTop: 1 }, children: m + 1 }),
-      /* @__PURE__ */ n("span", { style: { fontSize: 15, lineHeight: 1.55, paddingTop: 3 }, children: f })
-    ] }, m)) }),
-    /* @__PURE__ */ n(
+    /* @__PURE__ */ o("p", { style: { fontSize: 15, lineHeight: 1.65, marginBottom: 24, opacity: 0.85, marginTop: 0 }, children: i.body }),
+    /* @__PURE__ */ o("ol", { style: { listStyle: "none", padding: 0, margin: "0 0 24px", display: "flex", flexDirection: "column", gap: 12 }, children: g.map((f, u) => /* @__PURE__ */ l("li", { style: { display: "flex", alignItems: "flex-start", gap: 12 }, children: [
+      /* @__PURE__ */ o("span", { style: { width: 28, height: 28, borderRadius: "50%", background: r, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 700, flexShrink: 0, marginTop: 1 }, children: u + 1 }),
+      /* @__PURE__ */ o("span", { style: { fontSize: 15, lineHeight: 1.55, paddingTop: 3 }, children: f })
+    ] }, u)) }),
+    /* @__PURE__ */ o(
       "a",
       {
         href: "#",
-        style: { display: "inline-flex", alignItems: "center", gap: 6, background: a, color: "#fff", fontSize: 14, fontWeight: 600, padding: "10px 20px", borderRadius: 8, border: "none", cursor: "pointer", textDecoration: "none" },
-        children: s.cta
+        style: { display: "inline-flex", alignItems: "center", gap: 6, background: r, color: "#fff", fontSize: 14, fontWeight: 600, padding: "10px 20px", borderRadius: 8, border: "none", cursor: "pointer", textDecoration: "none" },
+        children: i.cta
       }
     ),
-    /* @__PURE__ */ n("div", { style: { marginTop: 20, paddingTop: 16, borderTop: "1px solid rgba(0,0,0,.06)", fontSize: 12, opacity: 0.5 }, children: s.footer })
+    /* @__PURE__ */ o("div", { style: { marginTop: 20, paddingTop: 16, borderTop: "1px solid rgba(0,0,0,.06)", fontSize: 12, opacity: 0.5 }, children: i.footer })
   ] }) });
 }
 async function E(e) {
   await e.whenReady();
   const t = h(e.shadowRoot);
-  t.render(/* @__PURE__ */ n(C, { sdk: e })), e.on("destroy", () => t.unmount());
+  t.render(/* @__PURE__ */ o(C, { sdk: e })), e.on("destroy", () => t.unmount());
 }
 export {
   E as init

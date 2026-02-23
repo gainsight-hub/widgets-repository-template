@@ -1,5 +1,5 @@
-import { jsx as o, jsxs as n } from "react/jsx-runtime";
-import { createRoot as s } from "react-dom/client";
+import { jsx as o, jsxs as s } from "react/jsx-runtime";
+import { createRoot as i } from "react-dom/client";
 const a = {
   en: {
     title: "Welcome to Our Community",
@@ -47,46 +47,35 @@ const a = {
     footer: "Conteúdo exibido no seu idioma detectado."
   }
 };
-function d(e) {
-  return a[e] ?? a.en;
+function c(t) {
+  return a[t] ?? a.en;
 }
 function l() {
-  const e = document.documentElement.lang || new URLSearchParams(window.location.search).get("lang"), t = e == null ? void 0 : e.trim().toLowerCase().split(/[-_]/)[0];
-  return t && t in a ? t : "en";
+  const t = document.documentElement.lang || new URLSearchParams(window.location.search).get("lang"), e = t == null ? void 0 : t.trim().toLowerCase().split(/[-_]/)[0];
+  return e && e in a ? e : "en";
 }
-const i = "#6366f1";
-function p({ children: e }) {
-  return /* @__PURE__ */ o("span", { style: { fontSize: 11, fontWeight: 600, letterSpacing: ".04em", textTransform: "uppercase", background: i, color: "#fff", padding: "3px 8px", borderRadius: 6, marginLeft: "auto" }, children: e });
-}
-function r({ n: e, text: t }) {
-  return /* @__PURE__ */ n("li", { style: { display: "flex", alignItems: "flex-start", gap: 12 }, children: [
-    /* @__PURE__ */ o("span", { style: { width: 28, height: 28, borderRadius: "50%", background: i, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 700, flexShrink: 0 }, children: e }),
-    /* @__PURE__ */ o("span", { style: { fontSize: 15, lineHeight: 1.55, paddingTop: 3 }, children: t })
-  ] });
-}
-function c() {
-  const e = l(), t = d(e);
-  return /* @__PURE__ */ o("div", { style: { fontFamily: "system-ui, -apple-system, sans-serif", padding: 24, color: "#1e293b" }, children: /* @__PURE__ */ n("div", { style: { background: "#fff", borderRadius: 12, boxShadow: "0 1px 3px rgba(0,0,0,.08), 0 4px 14px rgba(0,0,0,.04)", padding: 32, maxWidth: 640 }, children: [
-    /* @__PURE__ */ n("div", { style: { display: "flex", alignItems: "center", gap: 12, marginBottom: 20 }, children: [
-      /* @__PURE__ */ o("div", { style: { width: 44, height: 44, borderRadius: 10, background: i, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22, flexShrink: 0 }, children: "🌐" }),
-      /* @__PURE__ */ o("h2", { style: { fontSize: 22, fontWeight: 700, margin: 0 }, children: t.title }),
-      /* @__PURE__ */ o(p, { children: e })
+function u() {
+  const t = l(), e = c(t);
+  return /* @__PURE__ */ o("div", { className: "lw-root", children: /* @__PURE__ */ s("div", { className: "lw-card", children: [
+    /* @__PURE__ */ s("div", { className: "lw-header", children: [
+      /* @__PURE__ */ o("div", { className: "lw-icon", children: "🌐" }),
+      /* @__PURE__ */ o("h2", { className: "lw-title", children: e.title }),
+      /* @__PURE__ */ o("span", { className: "lw-badge", children: t })
     ] }),
-    /* @__PURE__ */ o("p", { style: { fontSize: 15, lineHeight: 1.65, marginBottom: 24, opacity: 0.85, marginTop: 0 }, children: t.body }),
-    /* @__PURE__ */ n("ol", { style: { listStyle: "none", padding: 0, margin: "0 0 24px", display: "flex", flexDirection: "column", gap: 12 }, children: [
-      /* @__PURE__ */ o(r, { n: 1, text: t.step1 }),
-      /* @__PURE__ */ o(r, { n: 2, text: t.step2 }),
-      /* @__PURE__ */ o(r, { n: 3, text: t.step3 })
-    ] }),
-    /* @__PURE__ */ o("a", { href: "#", style: { display: "inline-flex", background: i, color: "#fff", fontSize: 14, fontWeight: 600, padding: "10px 20px", borderRadius: 8, textDecoration: "none" }, children: t.cta }),
-    /* @__PURE__ */ o("div", { style: { marginTop: 20, paddingTop: 16, borderTop: "1px solid rgba(0,0,0,.06)", fontSize: 12, opacity: 0.5 }, children: t.footer })
+    /* @__PURE__ */ o("p", { className: "lw-body", children: e.body }),
+    /* @__PURE__ */ o("ol", { className: "lw-steps", children: [e.step1, e.step2, e.step3].map((r, n) => /* @__PURE__ */ s("li", { className: "lw-step", children: [
+      /* @__PURE__ */ o("span", { className: "lw-step-num", children: n + 1 }),
+      /* @__PURE__ */ o("span", { className: "lw-step-text", children: r })
+    ] }, n)) }),
+    /* @__PURE__ */ o("a", { href: "#", className: "lw-cta", children: e.cta }),
+    /* @__PURE__ */ o("div", { className: "lw-footer", children: e.footer })
   ] }) });
 }
-async function f(e) {
-  await e.whenReady();
-  const t = s(e.shadowRoot);
-  t.render(/* @__PURE__ */ o(c, {})), e.on("destroy", () => t.unmount());
+async function p(t) {
+  await t.whenReady();
+  const e = i(t.shadowRoot);
+  e.render(/* @__PURE__ */ o(u, {})), t.on("destroy", () => e.unmount());
 }
 export {
-  f as init
+  p as init
 };

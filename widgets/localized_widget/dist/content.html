@@ -159,6 +159,10 @@
 
 <script>
 (function () {
+  console.log("[lw] script executing");
+  console.log("[lw] document.currentScript:", document.currentScript);
+  console.log("[lw] typeof getRootNode:", typeof (document.currentScript && document.currentScript.getRootNode));
+
   var T = {
     en: {
       title: "Welcome to Our Community",
@@ -217,27 +221,41 @@
 
   function detect() {
     var html = document.documentElement;
-    if (html && normalize(html.getAttribute("lang"))) return normalize(html.getAttribute("lang"));
+    var htmlLang = html ? html.getAttribute("lang") : null;
+    console.log("[lw] detect: html[lang] =", JSON.stringify(htmlLang), "-> normalized:", normalize(htmlLang));
+    if (normalize(htmlLang)) return normalize(htmlLang);
 
     var meta =
       document.querySelector('meta[http-equiv="content-language"]') ||
       document.querySelector('meta[name="language"]') ||
       document.querySelector('meta[property="og:locale"]');
-    if (meta && normalize(meta.getAttribute("content"))) return normalize(meta.getAttribute("content"));
+    var metaContent = meta ? meta.getAttribute("content") : null;
+    console.log("[lw] detect: meta content =", JSON.stringify(metaContent), "-> normalized:", normalize(metaContent));
+    if (normalize(metaContent)) return normalize(metaContent);
 
     var segs = window.location.pathname.split("/").filter(Boolean);
+    console.log("[lw] detect: URL pathname =", JSON.stringify(window.location.pathname), "segments:", JSON.stringify(segs));
     for (var i = 0; i < Math.min(segs.length, 2); i++) {
-      if (normalize(segs[i])) return normalize(segs[i]);
+      if (normalize(segs[i])) {
+        console.log("[lw] detect: matched URL segment:", segs[i]);
+        return normalize(segs[i]);
+      }
     }
     var p = new URLSearchParams(window.location.search);
     var qp = normalize(p.get("lang")) || normalize(p.get("locale")) || normalize(p.get("hl"));
+    console.log("[lw] detect: query params lang/locale/hl =", JSON.stringify(p.get("lang")), JSON.stringify(p.get("locale")), JSON.stringify(p.get("hl")), "-> resolved:", qp);
     if (qp) return qp;
 
     var langs = navigator.languages || [navigator.language || navigator.userLanguage];
+    console.log("[lw] detect: navigator.languages =", JSON.stringify(langs));
     for (var j = 0; j < langs.length; j++) {
-      if (normalize(langs[j])) return normalize(langs[j]);
+      if (normalize(langs[j])) {
+        console.log("[lw] detect: matched browser lang:", langs[j], "-> normalized:", normalize(langs[j]));
+        return normalize(langs[j]);
+      }
     }
 
+    console.log("[lw] detect: no locale found, returning null");
     return null;
   }
 
@@ -245,26 +263,66 @@
     ? document.currentScript.getRootNode()
     : document;
 
+  console.log("[lw] scope type:", scope.constructor.name, "scope nodeName:", scope.nodeName || "(none)");
+  console.log("[lw] scope === document:", scope === document);
+  console.log("[lw] scope is ShadowRoot:", scope instanceof ShadowRoot);
+
   var root = scope.querySelector
     ? scope.querySelector(".lw-root")
     : null;
 
-  if (!root) return;
+  console.log("[lw] root element found:", !!root);
+  if (root) {
+    console.log("[lw] root tagName:", root.tagName, "root.className:", root.className);
+    console.log("[lw] root data-fallback:", JSON.stringify(root.getAttribute("data-fallback")));
+    console.log("[lw] root data-show-badge:", JSON.stringify(root.getAttribute("data-show-badge")));
+  }
+
+  if (!root) {
+    console.log("[lw] ABORT: root element not found in scope");
+    console.log("[lw] trying document.querySelector as fallback...");
+    root = document.querySelector(".lw-root");
+    console.log("[lw] document.querySelector result:", !!root);
+    if (!root) {
+      console.log("[lw] ABORT: root not found anywhere");
+      return;
+    }
+  }
 
   var fallback = normalize(root.getAttribute("data-fallback")) || "en";
+  console.log("[lw] fallback locale:", fallback);
+
   var showBadge = root.getAttribute("data-show-badge") === "yes";
-  var locale = detect() || fallback;
+  console.log("[lw] showBadge:", showBadge);
+
+  var detected = detect();
+  console.log("[lw] detected locale:", detected);
+
+  var locale = detected || fallback;
+  console.log("[lw] final locale:", locale);
+
   var strings = T[locale] || T[fallback] || T.en;
+  console.log("[lw] strings keys:", Object.keys(strings));
+  console.log("[lw] strings.title:", strings.title);
 
   var els = root.querySelectorAll("[data-i18n]");
+  console.log("[lw] found", els.length, "elements with [data-i18n]");
+
   for (var k = 0; k < els.length; k++) {
     var key = els[k].getAttribute("data-i18n");
+    var before = els[k].textContent;
     if (key === "badge") {
       els[k].textContent = locale.toUpperCase();
       if (!showBadge) els[k].classList.add("lw-badge-hidden");
+      console.log("[lw] element", k, "key=badge, set to:", locale.toUpperCase());
     } else if (strings[key]) {
       els[k].textContent = strings[key];
+      console.log("[lw] element", k, "key=" + key, "before:", JSON.stringify(before.substring(0, 40)), "after:", JSON.stringify(strings[key].substring(0, 40)));
+    } else {
+      console.log("[lw] element", k, "key=" + key, "NO MATCH in strings");
     }
   }
+
+  console.log("[lw] done");
 })();
 </script>

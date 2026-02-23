@@ -78,7 +78,7 @@
         "text_color": "#1e293b",
         "show_locale_badge": "yes"
       },
-      "description": "A multi-language widget with automatic locale discovery. Detects the user's language from the page and renders localized content — no duplicate pages needed.",
+      "description": "A multi-language widget with automatic locale discovery using the Widget SDK. Detects the user's language and renders localized content.",
       "settings": {
         "configurable": true,
         "editable": true,
@@ -92,7 +92,7 @@
       "type": "localized_widget",
       "source": {
         "path": "widgets/localized_widget/dist",
-        "entry": "content.html"
+        "entry": "index.html"
       },
       "imageSrc": "widgets/localized_widget/thumbnail.png"
     }

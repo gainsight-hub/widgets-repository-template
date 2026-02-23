@@ -1,9 +1,13 @@
 {
   "version": "1.0.0",
   "title": "Localized Widget",
-  "description": "A multi-language widget with automatic locale discovery. Detects the user's language from the page and renders localized content — no duplicate pages needed.",
+  "description": "A multi-language widget with automatic locale discovery using the Widget SDK. Detects the user's language and renders localized content.",
   "category": "Content",
   "imageSrc": "thumbnail.png",
+  "source": {
+    "path": "dist",
+    "entry": "index.html"
+  },
   "configuration": {
     "properties": [
       {
@@ -55,9 +59,5 @@
     "card_background": "#ffffff",
     "text_color": "#1e293b",
     "show_locale_badge": "yes"
-  },
-  "source": {
-    "path": "dist",
-    "entry": "content.html"
   }
 }

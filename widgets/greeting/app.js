@@ -10,11 +10,4 @@ export async function init(sdk) {
     messageEl.textContent = props.message;
   };
   render(sdk.getProps());
-  sdk.on("propsChanged", (props) => {
-    console.log("[greeting] propsChanged fired", props);
-    render(props);
-  });
-  sdk.on("destroy", () => {
-    sdk.shadowRoot.querySelector(".card").innerHTML = "";
-  });
 }

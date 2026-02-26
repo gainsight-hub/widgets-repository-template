@@ -3,6 +3,7 @@
   "title": "Pokemon Widget",
   "description": "Displays Pikachu data fetched via the Pokemon API connector",
   "category": "Demo",
+  "imageSrc": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/35.png",
   "source": {
     "path": "dist",
     "entry": "content.html"

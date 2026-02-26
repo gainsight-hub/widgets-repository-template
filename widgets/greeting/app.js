@@ -4,14 +4,18 @@ export async function init(sdk) {
   console.log('[greeting] sdk ready');
   const render = (props) => {
     console.log('[greeting] render called with props', props);
-    sdk.$('.card').style.background = props.color;
-    sdk.$('#title').textContent = props.title;
-    sdk.$('#message').textContent = props.message;
-    console.log('[greeting] render complete', {
-      card: sdk.$('.card'),
-      title: sdk.$('#title'),
-      message: sdk.$('#message'),
-    });
+    const card = sdk.$('.card');
+    const titleEl = sdk.$('#title');
+    const messageEl = sdk.$('#message');
+    console.log('[greeting] DOM elements', { card, titleEl, messageEl });
+    if (!card || !titleEl || !messageEl) {
+      console.error('[greeting] DOM elements not found — sdk.$ may not be querying shadow DOM correctly');
+      return;
+    }
+    card.style.background = props.color;
+    titleEl.textContent = props.title;
+    messageEl.textContent = props.message;
+    console.log('[greeting] render complete');
   };
   const props = sdk.getProps();
   console.log('[greeting] initial props', props);

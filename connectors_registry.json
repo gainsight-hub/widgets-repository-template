@@ -1,0 +1,10 @@
+{
+  "connectors": [
+    {
+      "name": "Pokemon API",
+      "permalink": "pokemon-api",
+      "url": "https://pokeapi.co/api/v2/pokemon/pikachu",
+      "method": "GET"
+    }
+  ]
+}

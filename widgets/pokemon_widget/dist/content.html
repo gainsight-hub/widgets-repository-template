@@ -1,1 +1,151 @@
-<p>Loading...</p>
+<script src="https://static.customer-hub.northpass.com/widget-sdk/latest/index.umd.js"></script>
+<style>
+  .pk-card {
+    font-family: system-ui, sans-serif;
+    max-width: 320px;
+    margin: 0 auto;
+    border-radius: 16px;
+    background: #f8f9fa;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+    overflow: hidden;
+    text-align: center;
+  }
+  .pk-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 24px 16px 40px;
+  }
+  .pk-sprite {
+    width: 140px;
+    height: 140px;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+  }
+  .pk-body {
+    padding: 16px;
+    margin-top: -20px;
+  }
+  .pk-name {
+    font-size: 24px;
+    font-weight: 700;
+    text-transform: capitalize;
+    color: #1a1a2e;
+    margin: 0 0 8px;
+  }
+  .pk-types {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  .pk-type {
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+    text-transform: capitalize;
+  }
+  .pk-stats { text-align: left; }
+  .pk-stat {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .pk-stat-name {
+    font-size: 11px;
+    color: #666;
+    text-transform: capitalize;
+    width: 100px;
+    flex-shrink: 0;
+  }
+  .pk-stat-bar-bg {
+    flex: 1;
+    height: 8px;
+    background: #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .pk-stat-bar {
+    height: 100%;
+    border-radius: 4px;
+    background: #667eea;
+  }
+  .pk-stat-val {
+    font-size: 12px;
+    font-weight: 600;
+    color: #333;
+    width: 28px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .pk-loading, .pk-error {
+    font-family: system-ui, sans-serif;
+    text-align: center;
+    padding: 40px 16px;
+    color: #666;
+  }
+  .pk-error { color: #e53e3e; }
+</style>
+<div id="pk-root">
+  <div class="pk-loading">Loading...</div>
+</div>
+<script>
+  (async () => {
+    const root = document.getElementById('pk-root');
+    const TYPE_COLORS = {
+      normal: '#A8A878', fire: '#F08030', water: '#6890F0',
+      electric: '#F8D030', grass: '#78C850', ice: '#98D8D8',
+      fighting: '#C03028', poison: '#A040A0', ground: '#E0C068',
+      flying: '#A890F0', psychic: '#F85888', bug: '#A8B820',
+      rock: '#B8A038', ghost: '#705898', dragon: '#7038F8',
+      dark: '#705848', steel: '#B8B8D0', fairy: '#EE99AC',
+    };
+
+    const render = (data) => {
+      const sprite = data.sprites?.other?.['official-artwork']?.front_default
+        ?? data.sprites?.front_default;
+      const types = data.types.map(t => t.type.name);
+      const stats = data.stats.map(s => ({
+        name: s.stat.name.replace('-', ' '),
+        value: s.base_stat,
+      }));
+
+      root.innerHTML = `
+        <div class="pk-card">
+          <div class="pk-header">
+            ${sprite ? `<img class="pk-sprite" src="${sprite}" alt="${data.name}">` : ''}
+          </div>
+          <div class="pk-body">
+            <h2 class="pk-name">${data.name}</h2>
+            <div class="pk-types">
+              ${types.map(t => `<span class="pk-type" style="background:${TYPE_COLORS[t] ?? '#777'}">${t}</span>`).join('')}
+            </div>
+            <div class="pk-stats">
+              ${stats.map(s => `
+                <div class="pk-stat">
+                  <span class="pk-stat-name">${s.name}</span>
+                  <div class="pk-stat-bar-bg">
+                    <div class="pk-stat-bar" style="width:${Math.round(s.value / 255 * 100)}%"></div>
+                  </div>
+                  <span class="pk-stat-val">${s.value}</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+    };
+
+    try {
+      const sdk = new window.WidgetServiceSDK();
+      const data = await sdk.connectors.execute({
+        permalink: 'pokemon-api',
+        method: 'GET',
+      });
+      render(data);
+    } catch (err) {
+      root.innerHTML = '<div class="pk-error">Failed to load Pokemon data.</div>';
+    }
+  })();
+</script>

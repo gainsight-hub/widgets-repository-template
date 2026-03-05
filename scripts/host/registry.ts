@@ -25,10 +25,12 @@ export const buildPreviewRegistry = (
   const widgets = [...tunnelMap.entries()].map(([type, tunnelUrl]) => {
     const widget = allWidgets.find((w) => w.type === type)!;
     const { source, ...rest } = widget;
+    const rawHtml = readFileSync(join(ROOT, source.path, source.entry), 'utf-8');
+    const html = rawHtml.replace(/(href|src)="\.\/([^"]+)"/g, `$1="${tunnelUrl}/$2"`);
     return {
       ...rest,
       content: {
-        endpoint: `${tunnelUrl}/${source.entry}`,
+        html,
         method: 'GET',
         requiresAuthentication: false,
         cacheStrategy: 'no-cache',

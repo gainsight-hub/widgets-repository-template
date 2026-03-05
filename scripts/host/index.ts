@@ -44,13 +44,13 @@ const run = async () => {
   let port = BASE_PORT;
   for (const widget of activeWidgets) {
     const s = spinner();
-    s.start(`Starting ${widget.type}...`);
-    const stop = await startWidgetServer(widget, port, colorMap.get(widget.type) ?? 0);
-    stopFns.push(stop);
-
-    s.message(`Creating tunnel for ${widget.type}...`);
+    s.start(`Creating tunnel for ${widget.type}...`);
     const url = await createTunnel(port, authtoken);
     tunnelMap.set(widget.type, url);
+
+    s.message(`Starting ${widget.type}...`);
+    const stop = await startWidgetServer(widget, port, colorMap.get(widget.type) ?? 0, url);
+    stopFns.push(stop);
     s.stop(chalk.green('✓') + ` ${widget.type} → ${url}`);
 
     port++;
@@ -109,12 +109,12 @@ const run = async () => {
         for (const w of activeWidgets) {
           if (!tunnelMap.has(w.type)) {
             const ts = spinner();
-            ts.start(`Starting ${w.type}...`);
-            const stop = await startWidgetServer(w, port, colorMap.get(w.type) ?? 0);
-            stopFns.push(stop);
-            ts.message(`Creating tunnel for ${w.type}...`);
+            ts.start(`Creating tunnel for ${w.type}...`);
             const url = await createTunnel(port, authtoken as string);
             tunnelMap.set(w.type, url);
+            ts.message(`Starting ${w.type}...`);
+            const stop = await startWidgetServer(w, port, colorMap.get(w.type) ?? 0, url);
+            stopFns.push(stop);
             ts.stop(chalk.green('✓') + ` ${w.type} → ${url}`);
             port++;
           }

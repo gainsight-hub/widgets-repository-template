@@ -1,0 +1,24 @@
+{
+  "name": "widgets-repository",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "host": "tsx bin/host/index.ts"
+  },
+  "dependencies": {
+    "@inquirer/checkbox": "^3",
+    "chalk": "^5",
+    "execa": "^9",
+    "http-proxy": "^1",
+    "ora": "^8",
+    "serve": "^14",
+    "strip-ansi": "^7"
+  },
+  "devDependencies": {
+    "@types/http-proxy": "^1",
+    "@types/node": "^22",
+    "playwright": "^1.58.2",
+    "tsx": "^4",
+    "typescript": "^5"
+  }
+}

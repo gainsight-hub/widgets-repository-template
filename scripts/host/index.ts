@@ -58,7 +58,7 @@ const run = async () => {
 
   const s = spinner();
   s.start('Registering with widget service...');
-  await postRegistry(buildPreviewRegistry(tunnelMap, allWidgets));
+  await postRegistry(await buildPreviewRegistry(tunnelMap, allWidgets));
   s.stop(chalk.green('✓') + ` Registry posted (${activeWidgets.length} widgets active)`);
 
   const showStatus = (widgets: WidgetEntry[]) => {
@@ -119,7 +119,7 @@ const run = async () => {
             port++;
           }
         }
-        await postRegistry(buildPreviewRegistry(tunnelMap, allWidgets));
+        await postRegistry(await buildPreviewRegistry(tunnelMap, allWidgets));
         console.log(chalk.green(`✓ Registry updated (${activeWidgets.length} widgets active)`));
         showStatus(activeWidgets);
       }

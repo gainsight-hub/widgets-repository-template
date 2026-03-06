@@ -18,29 +18,26 @@ const readConnectorsRegistry = (): { connectors: unknown[] } | null => {
 export const isDevWidget = (widget: WidgetEntry): boolean =>
   existsSync(join(ROOT, 'widgets', widget.type, 'package.json'));
 
-const readPreviewHtml = (widget: WidgetEntry): string => {
-  const devEntryPath = join(ROOT, 'widgets', widget.type, 'content.html');
-  if (isDevWidget(widget) && existsSync(devEntryPath)) {
-    return readFileSync(devEntryPath, 'utf-8');
+const readBuiltHtml = (widget: WidgetEntry): string =>
+  readFileSync(join(ROOT, widget.source.path, widget.source.entry), 'utf-8');
+
+const fetchDevHtml = async (widget: WidgetEntry, tunnelUrl: string): Promise<string> => {
+  const response = await fetch(`${tunnelUrl}/content.html`);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch dev HTML for ${widget.type}: ${response.status} ${response.statusText}`);
   }
 
-  return readFileSync(join(ROOT, widget.source.path, widget.source.entry), 'utf-8');
+  return response.text();
 };
 
-const absolutizeAssetUrls = (html: string, tunnelUrl: string): string =>
-  html
-    .replace(/(href|src)="\.\/([^"]+)"/g, `$1="${tunnelUrl}/$2"`)
-    .replace(/(href|src)="\/([^"]+)"/g, `$1="${tunnelUrl}/$2"`);
-
-export const buildPreviewRegistry = (
+export const buildPreviewRegistry = async (
   tunnelMap: Map<string, string>,
   allWidgets: WidgetEntry[],
-): object => {
-  const widgets = [...tunnelMap.entries()].map(([type, tunnelUrl]) => {
+): Promise<object> => {
+  const widgets = await Promise.all([...tunnelMap.entries()].map(async ([type, tunnelUrl]) => {
     const widget = allWidgets.find((w) => w.type === type)!;
     const { source, ...rest } = widget;
-    const rawHtml = readPreviewHtml(widget);
-    const html = absolutizeAssetUrls(rawHtml, tunnelUrl);
+    const html = isDevWidget(widget) ? await fetchDevHtml(widget, tunnelUrl) : readBuiltHtml(widget);
     return {
       ...rest,
       content: {
@@ -50,7 +47,7 @@ export const buildPreviewRegistry = (
         cacheStrategy: 'no-cache',
       },
     };
-  });
+  }));
   const connectors = readConnectorsRegistry();
   if (connectors) return { widgets, connectors: connectors.connectors };
   return { widgets };

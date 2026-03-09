@@ -6,7 +6,7 @@ const styles = {
     padding: "2rem",
     fontFamily: '"Inter", system-ui, -apple-system, sans-serif',
     borderRadius: "12px",
-    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+    background: "blue",
     color: "#ffffff",
     minHeight: "120px",
     display: "flex",

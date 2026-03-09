@@ -14,12 +14,18 @@ import type { DevProcess } from './processes'
 
 const REPO_ROOT = process.cwd()
 const DEFAULT_PORT = 5173
+const NGROK_BASE_API_PORT = 4040
+
+interface WidgetSession {
+  widget: WidgetDefinition
+  port: number
+  ngrokSession: NgrokSession | null
+  devProcess: DevProcess | null
+}
 
 interface SessionState {
   registrySnapshot: string
-  ngrokSession: NgrokSession | null
-  devProcess: DevProcess | null
-  widget: WidgetDefinition
+  sessions: WidgetSession[]
   committed: boolean
 }
 
@@ -46,8 +52,8 @@ const getWidgetPort = (widgetType: string): number => {
   }
 }
 
-const showSessionStatus = (widget: WidgetDefinition, tunnelUrl: string, port: number): void => {
-  const W = 58
+const showSessionStatus = (sessions: WidgetSession[]): void => {
+  const W = 62
   const border = chalk.bold.cyan
   const row = (text: string) => {
     const padded = `  ${text}`.padEnd(W)
@@ -59,9 +65,9 @@ const showSessionStatus = (widget: WidgetDefinition, tunnelUrl: string, port: nu
   empty()
   row(chalk.bold('Preview Session'))
   empty()
-  row(`Widget:   ${widget.type}`)
-  row(`Tunnel:   ${tunnelUrl}`)
-  row(`Dev port: ${port}`)
+  for (const s of sessions) {
+    row(`${s.widget.type.padEnd(16)} ${chalk.cyan(s.ngrokSession?.tunnelUrl ?? '')}  (${s.port})`)
+  }
   empty()
   row('Open CC and refresh. Dev server logs below.')
   row('Press Ctrl+C to end session and restore registry.')
@@ -70,24 +76,29 @@ const showSessionStatus = (widget: WidgetDefinition, tunnelUrl: string, port: nu
   console.log()
 }
 
-let cleaningUp = false
+let cleanupPromise: Promise<void> | null = null
 
-const cleanup = async (state: SessionState): Promise<void> => {
-  if (cleaningUp) return
-  cleaningUp = true
+const cleanup = (state: SessionState): Promise<void> => {
+  if (!cleanupPromise) cleanupPromise = runCleanup(state)
+  return cleanupPromise
+}
 
+const runCleanup = async (state: SessionState): Promise<void> => {
   console.log()
   ui.info(chalk.yellow('Shutting down...'))
 
-  if (state.devProcess) processes.stopDevServer(state.devProcess)
-  if (state.ngrokSession) ngrok.stopNgrok(state.ngrokSession)
+  for (const s of state.sessions) {
+    if (s.devProcess) processes.stopDevServer(s.devProcess)
+    if (s.ngrokSession) ngrok.stopNgrok(s.ngrokSession)
+  }
 
   tunnel.writeRegistry(state.registrySnapshot)
   ui.info('Registry restored.')
 
   if (state.committed) {
+    const types = state.sessions.map(s => s.widget.type).join(', ')
     try {
-      git.commitAndPush(`chore: restore registry after preview session for ${state.widget.type}`)
+      git.commitAndPush(`chore: restore registry after preview session for ${types}`)
       ui.info('Registry restore committed and pushed.')
     } catch (e: unknown) {
       ui.warn(`Failed to push restore commit: ${e instanceof Error ? e.message : String(e)}`)
@@ -115,46 +126,41 @@ const main = async (): Promise<void> => {
     process.exit(1)
   }
 
-  let selectedWidget: WidgetDefinition
+  let selected: WidgetDefinition[]
   if (widgets.length === 1) {
-    selectedWidget = widgets[0]
-    ui.info(`Auto-selected widget: ${chalk.bold(selectedWidget.type)}`)
+    selected = widgets
+    ui.info(`Auto-selected widget: ${chalk.bold(widgets[0].type)}`)
   } else {
-    const { widget } = await inquirer.prompt<{ widget: WidgetDefinition }>([
+    const { chosen } = await inquirer.prompt<{ chosen: WidgetDefinition[] }>([
       {
-        type: 'list',
-        name: 'widget',
-        message: chalk.bold('Which widget do you want to preview?'),
+        type: 'checkbox',
+        name: 'chosen',
+        message: chalk.bold('Which widgets do you want to preview?'),
         choices: widgets.map(w => ({
           name: `${chalk.bold(w.title ?? w.type)}  ${chalk.dim(w.type)}`,
           value: w,
+          checked: true,
         })),
+        validate: (v: WidgetDefinition[]) => v.length > 0 || 'Select at least one widget',
       },
     ])
-    selectedWidget = widget
+    selected = chosen
   }
 
   if (git.checkDirtyState()) {
     ui.warn('Uncommitted changes in other files detected. Proceeding anyway.')
   }
 
-  const port = getWidgetPort(selectedWidget.type)
-  const ngrokSpinner = ui.spinner('Starting ngrok...')
-  let ngrokSession: NgrokSession
-  try {
-    ngrokSession = await ngrok.startNgrok(port)
-    ngrokSpinner.succeed(`ngrok tunnel: ${chalk.cyan(ngrokSession.tunnelUrl)}`)
-  } catch (e: unknown) {
-    ngrokSpinner.fail(`Failed to start ngrok: ${e instanceof Error ? e.message : String(e)}`)
-    process.exit(1)
-  }
-
-  const registrySnapshot = tunnel.readRegistryRaw()
-  const state: SessionState = {
-    registrySnapshot,
-    ngrokSession,
+  const sessions: WidgetSession[] = selected.map((widget, i) => ({
+    widget,
+    port: getWidgetPort(widget.type),
+    ngrokSession: null,
     devProcess: null,
-    widget: selectedWidget,
+  }))
+
+  const state: SessionState = {
+    registrySnapshot: tunnel.readRegistryRaw(),
+    sessions,
     committed: false,
   }
 
@@ -172,12 +178,29 @@ const main = async (): Promise<void> => {
     process.exit(1)
   })
 
-  const patchedRegistry = tunnel.patchRegistry(registrySnapshot, selectedWidget.type, ngrokSession.tunnelUrl)
-  tunnel.writeRegistry(patchedRegistry)
+  for (let i = 0; i < sessions.length; i++) {
+    const s = sessions[i]
+    const ngrokSpinner = ui.spinner(`Starting ngrok for ${chalk.bold(s.widget.type)}...`)
+    try {
+      s.ngrokSession = await ngrok.startNgrok(s.port, NGROK_BASE_API_PORT + i)
+      ngrokSpinner.succeed(`${chalk.bold(s.widget.type)}: ${chalk.cyan(s.ngrokSession.tunnelUrl)}`)
+    } catch (e: unknown) {
+      ngrokSpinner.fail(`Failed to start ngrok for ${s.widget.type}: ${e instanceof Error ? e.message : String(e)}`)
+      await cleanup(state)
+      process.exit(1)
+    }
+  }
 
+  let patched = state.registrySnapshot
+  for (const s of sessions) {
+    patched = tunnel.patchRegistry(patched, s.widget.type, s.ngrokSession!.tunnelUrl)
+  }
+  tunnel.writeRegistry(patched)
+
+  const types = sessions.map(s => s.widget.type).join(', ')
   const commitSpinner = ui.spinner('Committing and pushing registry...')
   try {
-    git.commitAndPush(`chore: start preview session for ${selectedWidget.type}`)
+    git.commitAndPush(`chore: start preview session for ${types}`)
     state.committed = true
     commitSpinner.succeed('Registry committed and pushed.')
   } catch (e: unknown) {
@@ -186,23 +209,23 @@ const main = async (): Promise<void> => {
     process.exit(1)
   }
 
-  const widgetDir = path.join(REPO_ROOT, 'widgets', selectedWidget.type)
-  const devProcess = processes.startDevServer(
-    widgetDir,
-    ngrokSession.tunnelUrl,
-    port,
-    line => ui.widgetLog(selectedWidget.type, line)
-  )
-  state.devProcess = devProcess
+  for (const s of sessions) {
+    const widgetDir = path.join(REPO_ROOT, 'widgets', s.widget.type)
+    s.devProcess = processes.startDevServer(
+      widgetDir,
+      s.ngrokSession!.tunnelUrl,
+      s.port,
+      line => ui.widgetLog(s.widget.type, line)
+    )
+    s.devProcess.process.on('exit', async (code) => {
+      if (code !== 0 && code !== null) {
+        await cleanup(state)
+        process.exit(1)
+      }
+    })
+  }
 
-  devProcess.process.on('exit', async (code) => {
-    if (code !== 0 && code !== null) {
-      await cleanup(state)
-      process.exit(1)
-    }
-  })
-
-  showSessionStatus(selectedWidget, ngrokSession.tunnelUrl, port)
+  showSessionStatus(sessions)
 }
 
 main().catch(async (e: unknown) => {

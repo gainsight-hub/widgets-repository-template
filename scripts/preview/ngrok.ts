@@ -10,7 +10,7 @@ interface NgrokTunnelsResponse {
   tunnels: Array<{ public_url: string; proto: string }>
 }
 
-const pollForTunnel = async (proc: ChildProcess): Promise<string> => {
+const pollForTunnel = async (proc: ChildProcess, apiPort: number): Promise<string> => {
   let exited = false
   let exitCode: number | null = null
   proc.once('exit', code => {
@@ -29,7 +29,7 @@ const pollForTunnel = async (proc: ChildProcess): Promise<string> => {
     }
 
     try {
-      const res = await fetch('http://localhost:4040/api/tunnels')
+      const res = await fetch(`http://localhost:${apiPort}/api/tunnels`)
       if (res.ok) {
         const data = (await res.json()) as NgrokTunnelsResponse
         const tunnel = data.tunnels.find(t => t.proto === 'https')
@@ -43,14 +43,14 @@ const pollForTunnel = async (proc: ChildProcess): Promise<string> => {
   throw new Error('ngrok tunnel did not start in time. Check auth: ngrok config check')
 }
 
-export const startNgrok = async (port: number): Promise<NgrokSession> => {
+export const startNgrok = async (port: number, apiPort = 4040): Promise<NgrokSession> => {
   const check = spawnSync('ngrok', ['version'], { stdio: 'ignore' })
   if (check.error && 'code' in check.error && check.error.code === 'ENOENT') {
     throw new Error('ngrok not found. Install from https://ngrok.com/download')
   }
 
-  const proc = spawn('ngrok', ['http', String(port)], { stdio: 'ignore' })
-  const tunnelUrl = await pollForTunnel(proc)
+  const proc = spawn('ngrok', ['http', String(port), '--web-addr', `:${apiPort}`], { stdio: 'ignore' })
+  const tunnelUrl = await pollForTunnel(proc, apiPort)
   return { process: proc, tunnelUrl }
 }
 

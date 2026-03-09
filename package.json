@@ -1,0 +1,20 @@
+{
+  "name": "widgets-repository",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "host": "tsx scripts/host/index.ts",
+    "build-registry": "bash ./bin/build-registry.sh"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "inquirer": "^12.3.0",
+    "ora": "^8.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3"
+  }
+}

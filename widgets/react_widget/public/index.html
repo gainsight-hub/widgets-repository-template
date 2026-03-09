@@ -1,2 +1,25 @@
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@19",
+    "react/jsx-runtime": "https://esm.sh/react@19/jsx-runtime",
+    "react-dom": "https://esm.sh/react-dom@19",
+    "react-dom/client": "https://esm.sh/react-dom@19/client"
+  }
+}
+</script>
+<div id="widget-root"></div>
 <link rel="stylesheet" href="./widget.css">
-<script type="module" src="./widget.js"></script>
+<script type="module">
+import { init } from './widget.js';
+const container = document.getElementById('widget-root');
+if (container) {
+  init({
+    whenReady: () => Promise.resolve(),
+    shadowRoot: container,
+    getProps: () => ({ title: 'React Widget', description: 'A widget built with React and the Widget SDK.' }),
+    on: () => () => {},
+    emit: () => {},
+  });
+}
+</script>

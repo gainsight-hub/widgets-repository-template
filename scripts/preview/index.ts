@@ -9,22 +9,22 @@ import * as tunnel from './tunnel'
 import * as ngrok from './ngrok'
 import * as git from './git'
 import * as processes from './processes'
-import type { NgrokSession } from './ngrok'
+import type { NgrokTunnels } from './ngrok'
 import type { DevProcess } from './processes'
 
 const REPO_ROOT = process.cwd()
 const DEFAULT_PORT = 5173
-const NGROK_BASE_API_PORT = 4040
 
 interface WidgetSession {
   widget: WidgetDefinition
   port: number
-  ngrokSession: NgrokSession | null
+  tunnelUrl: string | null
   devProcess: DevProcess | null
 }
 
 interface SessionState {
   registrySnapshot: string
+  ngrokTunnels: NgrokTunnels | null
   sessions: WidgetSession[]
   committed: boolean
 }
@@ -66,7 +66,7 @@ const showSessionStatus = (sessions: WidgetSession[]): void => {
   row(chalk.bold('Preview Session'))
   empty()
   for (const s of sessions) {
-    row(`${s.widget.type.padEnd(16)} ${chalk.cyan(s.ngrokSession?.tunnelUrl ?? '')}  (${s.port})`)
+    row(`${s.widget.type.padEnd(16)} ${chalk.cyan(s.tunnelUrl ?? '')}  (${s.port})`)
   }
   empty()
   row('Open CC and refresh. Dev server logs below.')
@@ -89,8 +89,8 @@ const runCleanup = async (state: SessionState): Promise<void> => {
 
   for (const s of state.sessions) {
     if (s.devProcess) processes.stopDevServer(s.devProcess)
-    if (s.ngrokSession) ngrok.stopNgrok(s.ngrokSession)
   }
+  if (state.ngrokTunnels) ngrok.stopNgrok(state.ngrokTunnels)
 
   tunnel.writeRegistry(state.registrySnapshot)
   ui.info('Registry restored.')
@@ -151,15 +151,16 @@ const main = async (): Promise<void> => {
     ui.warn('Uncommitted changes in other files detected. Proceeding anyway.')
   }
 
-  const sessions: WidgetSession[] = selected.map((widget, i) => ({
+  const sessions: WidgetSession[] = selected.map(widget => ({
     widget,
     port: getWidgetPort(widget.type),
-    ngrokSession: null,
+    tunnelUrl: null,
     devProcess: null,
   }))
 
   const state: SessionState = {
     registrySnapshot: tunnel.readRegistryRaw(),
+    ngrokTunnels: null,
     sessions,
     committed: false,
   }
@@ -178,22 +179,24 @@ const main = async (): Promise<void> => {
     process.exit(1)
   })
 
-  for (let i = 0; i < sessions.length; i++) {
-    const s = sessions[i]
-    const ngrokSpinner = ui.spinner(`Starting ngrok for ${chalk.bold(s.widget.type)}...`)
-    try {
-      s.ngrokSession = await ngrok.startNgrok(s.port, NGROK_BASE_API_PORT + i)
-      ngrokSpinner.succeed(`${chalk.bold(s.widget.type)}: ${chalk.cyan(s.ngrokSession.tunnelUrl)}`)
-    } catch (e: unknown) {
-      ngrokSpinner.fail(`Failed to start ngrok for ${s.widget.type}: ${e instanceof Error ? e.message : String(e)}`)
-      await cleanup(state)
-      process.exit(1)
+  const ngrokSpinner = ui.spinner('Starting ngrok tunnels...')
+  try {
+    const ports = sessions.map(s => s.port)
+    state.ngrokTunnels = await ngrok.startNgrok(ports)
+    for (const s of sessions) {
+      s.tunnelUrl = state.ngrokTunnels.urls.get(s.port) ?? null
     }
+    ngrokSpinner.succeed(
+      sessions.map(s => `${chalk.bold(s.widget.type)}: ${chalk.cyan(s.tunnelUrl ?? '')}`).join('  ')
+    )
+  } catch (e: unknown) {
+    ngrokSpinner.fail(`Failed to start ngrok: ${e instanceof Error ? e.message : String(e)}`)
+    process.exit(1)
   }
 
   let patched = state.registrySnapshot
   for (const s of sessions) {
-    patched = tunnel.patchRegistry(patched, s.widget.type, s.ngrokSession!.tunnelUrl)
+    patched = tunnel.patchRegistry(patched, s.widget.type, s.tunnelUrl!)
   }
   tunnel.writeRegistry(patched)
 
@@ -213,7 +216,7 @@ const main = async (): Promise<void> => {
     const widgetDir = path.join(REPO_ROOT, 'widgets', s.widget.type)
     s.devProcess = processes.startDevServer(
       widgetDir,
-      s.ngrokSession!.tunnelUrl,
+      s.tunnelUrl!,
       s.port,
       line => ui.widgetLog(s.widget.type, line)
     )

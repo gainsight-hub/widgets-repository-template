@@ -36,6 +36,7 @@
       "version": "1.0.0",
       "widgetsLibrary": true,
       "type": "vue_vite",
+      "source": { "path": "widgets/vue_vite/dist", "entry": "index.html" },
       "imageSrc": "widgets/vue_vite/thumbnail.png"
     },
     {
@@ -74,6 +75,7 @@
       "version": "1.0.0",
       "widgetsLibrary": true,
       "type": "svelte_vite",
+      "source": { "path": "widgets/svelte_vite/dist", "entry": "index.html" },
       "imageSrc": "widgets/svelte_vite/thumbnail.png"
     },
     {
@@ -112,6 +114,7 @@
       "version": "1.0.0",
       "widgetsLibrary": true,
       "type": "solid_vite",
+      "source": { "path": "widgets/solid_vite/dist", "entry": "index.html" },
       "imageSrc": "widgets/solid_vite/thumbnail.png"
     },
     {
@@ -150,6 +153,7 @@
       "version": "1.0.0",
       "widgetsLibrary": true,
       "type": "react_webpack",
+      "source": { "path": "widgets/react_webpack/dist", "entry": "index.html" },
       "imageSrc": "widgets/react_webpack/thumbnail.png"
     },
     {
@@ -188,6 +192,7 @@
       "version": "1.0.0",
       "widgetsLibrary": true,
       "type": "vanilla_parcel",
+      "source": { "path": "widgets/vanilla_parcel/dist", "entry": "index.html" },
       "imageSrc": "widgets/vanilla_parcel/thumbnail.png"
     },
     {
@@ -226,6 +231,7 @@
       "version": "1.0.0",
       "widgetsLibrary": true,
       "type": "preact_esbuild",
+      "source": { "path": "widgets/preact_esbuild/dist", "entry": "index.html" },
       "imageSrc": "widgets/preact_esbuild/thumbnail.png"
     },
     {
@@ -264,6 +270,7 @@
       "version": "1.0.0",
       "widgetsLibrary": true,
       "type": "lit_rollup",
+      "source": { "path": "widgets/lit_rollup/dist", "entry": "index.html" },
       "imageSrc": "widgets/lit_rollup/thumbnail.png"
     },
     {
@@ -302,6 +309,7 @@
       "version": "1.0.0",
       "widgetsLibrary": true,
       "type": "angular_cli",
+      "source": { "path": "widgets/angular_cli/dist", "entry": "index.html" },
       "imageSrc": "widgets/angular_cli/thumbnail.png"
     },
     {

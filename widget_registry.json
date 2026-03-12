@@ -195,6 +195,44 @@
       "configuration": {
         "properties": [
           {
+            "name": "title",
+            "type": "text",
+            "label": "Title",
+            "defaultValue": "Preact Widget",
+            "rules": { "required": true }
+          },
+          {
+            "name": "description",
+            "type": "text",
+            "label": "Description",
+            "defaultValue": "A widget built with Preact and esbuild."
+          }
+        ]
+      },
+      "containers": ["Full width"],
+      "defaultConfig": {
+        "title": "Preact Widget",
+        "description": "A widget built with Preact and esbuild."
+      },
+      "description": "A widget built with Preact and esbuild",
+      "settings": {
+        "configurable": true,
+        "editable": true,
+        "removable": true,
+        "shared": false,
+        "movable": false
+      },
+      "title": "Preact Widget",
+      "version": "1.0.0",
+      "widgetsLibrary": true,
+      "type": "preact_esbuild",
+      "imageSrc": "widgets/preact_esbuild/thumbnail.png"
+    },
+    {
+      "category": "Demo",
+      "configuration": {
+        "properties": [
+          {
             "name": "cards_per_row",
             "type": "number",
             "label": "Cards Per Row",

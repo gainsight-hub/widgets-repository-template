@@ -1,0 +1,17 @@
+{
+  "name": "preact-esbuild-widget",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/serve.mjs",
+    "build": "node scripts/build.mjs"
+  },
+  "dependencies": {
+    "preact": "^10.26.2"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.2",
+    "typescript": "^5.7.3"
+  }
+}

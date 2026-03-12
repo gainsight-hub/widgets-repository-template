@@ -1,0 +1,28 @@
+{
+  "version": "1.0.0",
+  "title": "Preact Widget",
+  "description": "A widget built with Preact and esbuild",
+  "category": "Demo",
+  "imageSrc": "thumbnail.png",
+  "configuration": {
+    "properties": [
+      {
+        "name": "title",
+        "type": "text",
+        "label": "Title",
+        "defaultValue": "Preact Widget",
+        "rules": { "required": true }
+      },
+      {
+        "name": "description",
+        "type": "text",
+        "label": "Description",
+        "defaultValue": "A widget built with Preact and esbuild."
+      }
+    ]
+  },
+  "defaultConfig": {
+    "title": "Preact Widget",
+    "description": "A widget built with Preact and esbuild."
+  }
+}

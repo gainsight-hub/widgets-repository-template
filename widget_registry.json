@@ -271,6 +271,44 @@
       "configuration": {
         "properties": [
           {
+            "name": "title",
+            "type": "text",
+            "label": "Title",
+            "defaultValue": "Angular Widget",
+            "rules": { "required": true }
+          },
+          {
+            "name": "description",
+            "type": "text",
+            "label": "Description",
+            "defaultValue": "A widget built with Angular 18 and the Angular CLI."
+          }
+        ]
+      },
+      "containers": ["Full width"],
+      "defaultConfig": {
+        "title": "Angular Widget",
+        "description": "A widget built with Angular 18 and the Angular CLI."
+      },
+      "description": "A widget built with Angular 18 and the Angular CLI",
+      "settings": {
+        "configurable": true,
+        "editable": true,
+        "removable": true,
+        "shared": false,
+        "movable": false
+      },
+      "title": "Angular Widget",
+      "version": "1.0.0",
+      "widgetsLibrary": true,
+      "type": "angular_cli",
+      "imageSrc": "widgets/angular_cli/thumbnail.png"
+    },
+    {
+      "category": "Demo",
+      "configuration": {
+        "properties": [
+          {
             "name": "cards_per_row",
             "type": "number",
             "label": "Cards Per Row",

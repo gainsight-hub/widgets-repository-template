@@ -1,0 +1,28 @@
+{
+  "version": "1.0.0",
+  "title": "Angular Widget",
+  "description": "A widget built with Angular 18 and the Angular CLI",
+  "category": "Demo",
+  "imageSrc": "thumbnail.png",
+  "configuration": {
+    "properties": [
+      {
+        "name": "title",
+        "type": "text",
+        "label": "Title",
+        "defaultValue": "Angular Widget",
+        "rules": { "required": true }
+      },
+      {
+        "name": "description",
+        "type": "text",
+        "label": "Description",
+        "defaultValue": "A widget built with Angular 18 and the Angular CLI."
+      }
+    ]
+  },
+  "defaultConfig": {
+    "title": "Angular Widget",
+    "description": "A widget built with Angular 18 and the Angular CLI."
+  }
+}

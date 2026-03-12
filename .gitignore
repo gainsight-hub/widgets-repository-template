@@ -1,0 +1,7 @@
+.env.local
+
+widgets/*/node_modules/
+widgets/*/dist/
+widgets/*/package-lock.json
+widgets/*/.parcel-cache/
+widgets/*/.angular/

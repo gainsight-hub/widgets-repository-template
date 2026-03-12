@@ -1,109 +1,18 @@
 {
   "widgets": [
     {
+      "type": "react_widget",
+      "title": "React Widget",
+      "version": "1.0.0",
+      "description": "A React widget using the ESM module pattern with Widget SDK",
       "category": "Demo",
-      "configuration": {
-        "properties": [
-          {
-            "name": "cards_per_row",
-            "type": "number",
-            "label": "Cards Per Row",
-            "defaultValue": 3,
-            "rules": {
-              "required": true,
-              "minimum": 1,
-              "maximum": 6
-            }
-          },
-          {
-            "name": "card_background",
-            "type": "color",
-            "label": "Card Background",
-            "defaultValue": "#ffffff"
-          },
-          {
-            "name": "card_text_color",
-            "type": "color",
-            "label": "Text Color",
-            "defaultValue": "#1f2937"
-          },
-          {
-            "name": "accent_color",
-            "type": "color",
-            "label": "Accent Color",
-            "defaultValue": "#3b82f6"
-          },
-          {
-            "name": "title_size",
-            "type": "select",
-            "label": "Title Size",
-            "defaultValue": "medium",
-            "options": [
-              {
-                "value": "small",
-                "label": "Small"
-              },
-              {
-                "value": "medium",
-                "label": "Medium"
-              },
-              {
-                "value": "large",
-                "label": "Large"
-              }
-            ]
-          },
-          {
-            "name": "card_style",
-            "type": "select",
-            "label": "Card Style",
-            "defaultValue": "shadow",
-            "options": [
-              {
-                "value": "flat",
-                "label": "Flat"
-              },
-              {
-                "value": "shadow",
-                "label": "Shadow"
-              },
-              {
-                "value": "bordered",
-                "label": "Bordered"
-              }
-            ]
-          },
-          {
-            "name": "show_icons",
-            "type": "select",
-            "label": "Show Icons",
-            "defaultValue": "yes",
-            "options": [
-              {
-                "value": "yes",
-                "label": "Yes"
-              },
-              {
-                "value": "no",
-                "label": "No"
-              }
-            ]
-          }
-        ]
+      "source": {
+        "path": "dist",
+        "entry": "index.html"
       },
       "containers": [
         "Full width"
       ],
-      "defaultConfig": {
-        "cards_per_row": 3,
-        "card_background": "#ffffff",
-        "card_text_color": "#1f2937",
-        "accent_color": "#3b82f6",
-        "title_size": "medium",
-        "card_style": "shadow",
-        "show_icons": "yes"
-      },
-      "description": "A configurable card grid widget demonstrating dynamic layout and styling options",
       "settings": {
         "configurable": true,
         "editable": true,
@@ -111,41 +20,6 @@
         "shared": false,
         "movable": false
       },
-      "title": "Card Grid",
-      "version": "1.0.0",
-      "widgetsLibrary": true,
-      "type": "card_grid",
-      "source": {
-        "path": "widgets/card_grid/dist",
-        "entry": "content.html"
-      },
-      "imageSrc": "widgets/card_grid/thumbnail.png"
-    },
-    {
-      "category": "Demo",
-      "containers": [
-        "Full width"
-      ],
-      "description": "Demo widget for presentation purposes",
-      "settings": {
-        "configurable": true,
-        "editable": true,
-        "removable": true,
-        "shared": false,
-        "movable": false
-      },
-      "title": "Demo widget",
-      "version": "1.0.0",
-      "widgetsLibrary": true,
-      "type": "demo_widget",
-      "source": {
-        "path": "widgets/demo_widget/dist",
-        "entry": "content.html"
-      },
-      "imageSrc": "widgets/demo_widget/thumbnail.png"
-    },
-    {
-      "category": "Demo",
       "configuration": {
         "properties": [
           {
@@ -165,14 +39,26 @@
           }
         ]
       },
-      "containers": [
-        "Full width"
-      ],
       "defaultConfig": {
         "title": "React Widget",
         "description": "A widget built with React and the Widget SDK."
       },
-      "description": "A React widget using the ESM module pattern with Widget SDK",
+      "widgetsLibrary": true,
+      "imageSrc": "widgets/react_widget/thumbnail.png"
+    },
+    {
+      "type": "styled_widget",
+      "title": "Styled Widget",
+      "version": "1.0.0",
+      "description": "A React widget using styled-components",
+      "category": "Demo",
+      "source": {
+        "path": "dist",
+        "entry": "index.html"
+      },
+      "containers": [
+        "Full width"
+      ],
       "settings": {
         "configurable": true,
         "editable": true,
@@ -180,15 +66,21 @@
         "shared": false,
         "movable": false
       },
-      "title": "React Widget",
-      "version": "1.0.0",
-      "widgetsLibrary": true,
-      "type": "react_widget",
-      "source": {
-        "path": "widgets/react_widget/dist",
-        "entry": "index.html"
+      "configuration": {
+        "properties": [
+          {
+            "name": "label",
+            "type": "text",
+            "label": "Label",
+            "defaultValue": "Styled Widget"
+          }
+        ]
       },
-      "imageSrc": "widgets/react_widget/thumbnail.png"
+      "defaultConfig": {
+        "label": "Styled Widget"
+      },
+      "widgetsLibrary": true,
+      "imageSrc": "widgets/styled_widget/thumbnail.png"
     }
   ]
 }

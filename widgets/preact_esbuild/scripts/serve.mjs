@@ -10,5 +10,5 @@ const ctx = await esbuild.context({
   sourcemap: true,
 });
 
-const { host, port } = await ctx.serve({ servedir: ".", port: 3002 });
-console.log(`Local: http://${host}:${port}/`);
+const { port } = await ctx.serve({ servedir: ".", host: "localhost", port: 3002 });
+console.log(`Local: http://localhost:${port}/`);

@@ -91,9 +91,7 @@
           }
         ]
       },
-      "containers": [
-        "Full width"
-      ],
+      "containers": ["Full width"],
       "defaultConfig": {
         "cards_per_row": 3,
         "card_background": "#ffffff",
@@ -118,14 +116,11 @@
       "source": {
         "path": "widgets/card_grid/dist",
         "entry": "content.html"
-      },
-      "imageSrc": "widgets/card_grid/thumbnail.png"
+      }
     },
     {
       "category": "Demo",
-      "containers": [
-        "Full width"
-      ],
+      "containers": ["Full width"],
       "description": "Demo widget for presentation purposes",
       "settings": {
         "configurable": true,
@@ -141,8 +136,7 @@
       "source": {
         "path": "widgets/demo_widget/dist",
         "entry": "content.html"
-      },
-      "imageSrc": "widgets/demo_widget/thumbnail.png"
+      }
     },
     {
       "category": "Demo",
@@ -165,9 +159,7 @@
           }
         ]
       },
-      "containers": [
-        "Full width"
-      ],
+      "containers": ["Full width"],
       "defaultConfig": {
         "title": "React Widget",
         "description": "A widget built with React and the Widget SDK."
@@ -187,8 +179,7 @@
       "source": {
         "path": "widgets/react_widget/dist",
         "entry": "index.html"
-      },
-      "imageSrc": "widgets/react_widget/thumbnail.png"
+      }
     }
   ]
 }

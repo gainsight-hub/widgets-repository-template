@@ -3,6 +3,7 @@
   "type": "module",
   "version": "1.0.0",
   "scripts": {
+    "dev": "node dev.mjs",
     "build": "node build.mjs"
   },
   "dependencies": {

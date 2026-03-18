@@ -1,7 +1,7 @@
 import * as esbuild from 'esbuild';
 import { writeFileSync, mkdirSync, existsSync } from 'fs';
 
-const outdir = 'dist';
+const outdir = '.dev-dist';
 if (!existsSync(outdir)) {
   mkdirSync(outdir, { recursive: true });
 }

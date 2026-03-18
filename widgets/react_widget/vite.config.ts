@@ -9,13 +9,5 @@ export default defineConfig({
       formats: ["es"],
       fileName: "widget",
     },
-    rollupOptions: {
-      external: [
-        "react",
-        "react-dom",
-        "react/jsx-runtime",
-        "react-dom/client",
-      ],
-    },
   },
 });

@@ -28,6 +28,7 @@ STYLESHEET_DEFAULT_RULES='[{"field":"pageType","operator":"in","value":["global"
 
 SCRIPT_DEFAULT_CONTENT_FILE="script.js"
 SCRIPT_DEFAULT_RULES='[{"field":"pageType","operator":"in","value":["global"]}]'
+SCRIPT_DEFAULT_PLACEMENT="head"
 
 # -----------------------------------------------------------------------------
 
@@ -545,9 +546,10 @@ if [ -d "$SCRIPTS_DIR" ]; then
 
     script=$(jq -n \
       --argjson default_rules "$SCRIPT_DEFAULT_RULES" \
+      --arg default_placement "$SCRIPT_DEFAULT_PLACEMENT" \
       --slurpfile sc "$script_config" \
       --arg path "$sc_path" \
-      '{"rules": $default_rules} * $sc[0] * {"path": $path} | del(.contentFile)')
+      '{"rules": $default_rules, "placement": $default_placement} * $sc[0] * {"path": $path} | del(.contentFile)')
 
     SCRIPTS_JSON=$(echo "$SCRIPTS_JSON" | jq --argjson sc "$script" '. + [$sc]')
     success "  Processed: $sc_name"

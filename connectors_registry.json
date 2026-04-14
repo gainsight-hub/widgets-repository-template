@@ -19,7 +19,6 @@
         }
       ],
       "permalink": "rest-countries",
-      "response_body": "{% set countries = response.body | from_json | sort(attribute='population', reverse=true) %}[{% for country in countries[:5] %}{{ {'name': country.name.common, 'capital': country.capital[0], 'population': country.population, 'flag': country.flags.png, 'region': country.region} | tojson }}{% if not loop.last %}, {% endif %}{% endfor %}]",
       "response_content_type": "application/json"
     }
   ]

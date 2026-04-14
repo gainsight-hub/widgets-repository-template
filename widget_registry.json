@@ -3,6 +3,7 @@
     {
       "type": "countries-react",
       "title": "Countries React",
+      "description": "A widget built with React and the Widget SDK.",
       "version": "1.0.0",
       "category": "Demo",
       "imageSrc": "widgets/countries-react/thumbnail.png",
@@ -48,6 +49,7 @@
     {
       "type": "countries-vue",
       "title": "Countries Vue",
+      "description": "A widget built with Vue and the Widget SDK.",
       "version": "1.0.0",
       "category": "Demo",
       "imageSrc": "widgets/countries-vue/thumbnail.png",
@@ -93,6 +95,7 @@
     {
       "type": "countries-angular",
       "title": "Countries Angular",
+      "description": "A widget built with Angular and the Widget SDK.",
       "version": "1.0.0",
       "category": "Demo",
       "imageSrc": "widgets/countries-angular/thumbnail.png",
@@ -138,6 +141,7 @@
     {
       "type": "countries-vanilla",
       "title": "Countries Vanilla",
+      "description": "A widget built with Vanilla JS and the Widget SDK.",
       "version": "1.0.0",
       "category": "Demo",
       "imageSrc": "widgets/countries-vanilla/thumbnail.png",
@@ -183,6 +187,7 @@
     {
       "type": "countries-html",
       "title": "Countries Html",
+      "description": "A widget built with HTML and the Widget SDK.",
       "version": "1.0.0",
       "category": "Demo",
       "imageSrc": "widgets/countries-html/thumbnail.png",

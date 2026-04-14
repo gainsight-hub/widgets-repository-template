@@ -22,18 +22,58 @@ export async function init(sdk: WidgetSDK) {
   sdk.shadowRoot.insertBefore(style, sdk.shadowRoot.firstChild);
   const root = sdk.shadowRoot.querySelector("#root")!;
 
-  const render = (props: WidgetProps) => {
-    root.innerHTML = `
-      <section class="vanilla-widget-section">
-        <h3 class="vanilla-widget-title">${esc(props.title ?? "")}</h3>
-        ${props.description ? `<p class="vanilla-widget-description">${esc(props.description)}</p>` : ""}
-      </section>
-    `;
-  };
+  root.innerHTML = `
+    <section class="vanilla-widget-section">
+      <h3 class="vanilla-widget-title">${esc(sdk.getProps().title ?? "")}</h3>
+      <p class="country-status">Loading…</p>
+    </section>
+  `;
 
-  render(sdk.getProps());
-  sdk.on("propsChanged", render);
+  sdk.on("propsChanged", (props: WidgetProps) => {
+    const el = root.querySelector(".vanilla-widget-title");
+    if (el) el.textContent = props.title ?? "";
+  });
+
+  let cancelled = false;
+  new window.WidgetServiceSDK().connectors
+    .execute({ permalink: "rest-countries", method: "GET" })
+    .then((raw) => {
+      if (cancelled) return;
+      const section = root.querySelector("section")!;
+      section.querySelector(".country-status")?.remove();
+      const list = document.createElement("ul");
+      list.className = "country-list";
+      [...raw]
+        .sort((a, b) => b.population - a.population)
+        .slice(0, 5)
+        .forEach((c) => {
+          const li = document.createElement("li");
+          li.className = "country-item";
+          const img = document.createElement("img");
+          img.src = c.flags.png;
+          img.alt = "";
+          img.className = "country-flag";
+          img.onerror = () => { img.style.display = "none"; };
+          const name = document.createElement("span");
+          name.className = "country-name";
+          name.textContent = c.name.common;
+          const capital = document.createElement("span");
+          capital.className = "country-capital";
+          capital.textContent = c.capital?.[0] ?? "N/A";
+          li.append(img, name, capital);
+          list.appendChild(li);
+        });
+      section.appendChild(list);
+    })
+    .catch((err: unknown) => {
+      if (cancelled) return;
+      const msg = err instanceof Error ? err.message : "Failed to load";
+      const status = root.querySelector(".country-status");
+      if (status) status.textContent = msg;
+    });
+
   sdk.on("destroy", () => {
+    cancelled = true;
     styles.delete(style);
     style.remove();
     root.innerHTML = "";

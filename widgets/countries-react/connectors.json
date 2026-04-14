@@ -1,0 +1,25 @@
+{
+  "connectors": [
+    {
+      "name": "REST Countries",
+      "url": "https://restcountries.com/v3.1/all",
+      "method": "GET",
+      "headers": [
+        {
+          "key": "Accept",
+          "value": "application/json",
+          "overridable": false
+        }
+      ],
+      "query_parameters": [
+        {
+          "key": "fields",
+          "value": "name,capital,population,flags,region",
+          "overridable": false
+        }
+      ],
+      "permalink": "rest-countries",
+      "response_content_type": "application/json"
+    }
+  ]
+}

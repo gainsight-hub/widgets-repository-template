@@ -18,6 +18,7 @@ export interface RawCountry {
   capital?: string[];
   population: number;
   flags: { png: string };
+  region: string;
 }
 
 export interface Country {
@@ -25,6 +26,11 @@ export interface Country {
   capital: string;
   population: number;
   flag: string;
+  region: string;
+}
+
+export interface CountryCardProps {
+  country: Country;
 }
 
 declare global {

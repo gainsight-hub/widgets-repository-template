@@ -1,8 +1,5 @@
 import widgetCss from "./widget.css?inline";
-import type { WidgetSDK, WidgetProps } from "./types";
-
-const esc = (s: string) =>
-  s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+import type { WidgetSDK, WidgetProps, Country } from "./types";
 
 let currentCss = widgetCss;
 const styles = new Set<HTMLStyleElement>();
@@ -14,6 +11,58 @@ if (import.meta.hot) {
   });
 }
 
+const TOP_COUNTRIES = 5;
+
+const createSkeleton = (): HTMLElement => {
+  const wrapper = document.createElement("div");
+  wrapper.setAttribute("role", "status");
+  wrapper.setAttribute("aria-label", "Loading country data");
+  const list = document.createElement("ul");
+  list.className = "country-list";
+  list.innerHTML = Array(TOP_COUNTRIES)
+    .fill(
+      `<li aria-hidden="true" class="country-item country-item--skeleton">
+        <div class="country-flag country-flag--skeleton"></div>
+        <div class="country-details">
+          <div class="country-skeleton-line country-skeleton-line--name"></div>
+          <div class="country-skeleton-line country-skeleton-line--meta"></div>
+        </div>
+      </li>`
+    )
+    .join("");
+  wrapper.appendChild(list);
+  return wrapper;
+};
+
+const createCard = (country: Country): HTMLElement => {
+  const item = document.createElement("li");
+  item.className = "country-item";
+
+  const img = document.createElement("img");
+  img.className = "country-flag";
+  img.src = country.flag;
+  img.alt = `Flag of ${country.name}`;
+  img.onerror = () => { img.style.opacity = "0"; };
+
+  const details = document.createElement("div");
+  details.className = "country-details";
+
+  const name = document.createElement("span");
+  name.className = "country-name";
+  name.textContent = country.name;
+
+  const meta = document.createElement("span");
+  meta.className = "country-meta";
+  meta.textContent = `${country.capital} · ${country.population.toLocaleString("en-US")} · ${country.region}`;
+
+  details.appendChild(name);
+  details.appendChild(meta);
+  item.appendChild(img);
+  item.appendChild(details);
+
+  return item;
+};
+
 export async function init(sdk: WidgetSDK) {
   await sdk.whenReady();
   const style = document.createElement("style");
@@ -22,54 +71,58 @@ export async function init(sdk: WidgetSDK) {
   sdk.shadowRoot.insertBefore(style, sdk.shadowRoot.firstChild);
   const root = sdk.shadowRoot.querySelector("#root")!;
 
-  root.innerHTML = `
-    <section class="vanilla-widget-section">
-      <h3 class="vanilla-widget-title">${esc(sdk.getProps().title ?? "")}</h3>
-      <p class="country-status">Loading…</p>
-    </section>
-  `;
+  const section = document.createElement("section");
+  section.className = "vanilla-widget-section";
+
+  const header = document.createElement("p");
+  header.className = "widget-framework-header";
+  header.textContent = (sdk.getProps() as WidgetProps).title ?? "";
+
+  const contentDiv = document.createElement("div");
+  section.appendChild(header);
+  section.appendChild(contentDiv);
+  root.appendChild(section);
 
   sdk.on("propsChanged", (props: WidgetProps) => {
-    const el = root.querySelector(".vanilla-widget-title");
-    if (el) el.textContent = props.title ?? "";
+    header.textContent = props.title ?? "";
   });
+
+  contentDiv.appendChild(createSkeleton());
 
   let cancelled = false;
   new window.WidgetServiceSDK().connectors
     .execute({ permalink: "rest-countries", method: "GET" })
     .then((raw) => {
       if (cancelled) return;
-      const section = root.querySelector("section")!;
-      section.querySelector(".country-status")?.remove();
+      const sorted = [...raw]
+        .sort((a, b) => b.population - a.population)
+        .slice(0, TOP_COUNTRIES);
+      contentDiv.innerHTML = "";
       const list = document.createElement("ul");
       list.className = "country-list";
-      [...raw]
-        .sort((a, b) => b.population - a.population)
-        .slice(0, 5)
-        .forEach((c) => {
-          const li = document.createElement("li");
-          li.className = "country-item";
-          const img = document.createElement("img");
-          img.src = c.flags.png;
-          img.alt = "";
-          img.className = "country-flag";
-          img.onerror = () => { img.style.display = "none"; };
-          const name = document.createElement("span");
-          name.className = "country-name";
-          name.textContent = c.name.common;
-          const capital = document.createElement("span");
-          capital.className = "country-capital";
-          capital.textContent = c.capital?.[0] ?? "N/A";
-          li.append(img, name, capital);
-          list.appendChild(li);
-        });
-      section.appendChild(list);
+      sorted.forEach((c) =>
+        list.appendChild(
+          createCard({
+            name: c.name.common,
+            capital: c.capital?.[0] ?? "N/A",
+            population: c.population,
+            flag: c.flags.png,
+            region: c.region,
+          })
+        )
+      );
+      contentDiv.appendChild(list);
     })
     .catch((err: unknown) => {
       if (cancelled) return;
-      const msg = err instanceof Error ? err.message : "Failed to load";
-      const status = root.querySelector(".country-status");
-      if (status) status.textContent = msg;
+      contentDiv.innerHTML = "";
+      const errorDiv = document.createElement("div");
+      errorDiv.className = "country-error";
+      errorDiv.setAttribute("role", "alert");
+      const msg = document.createElement("p");
+      msg.textContent = err instanceof Error ? err.message : "Failed to load country data.";
+      errorDiv.appendChild(msg);
+      contentDiv.appendChild(errorDiv);
     });
 
   sdk.on("destroy", () => {

@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { ref, onUnmounted } from "vue";
 import type { WidgetSDK, WidgetProps, Country } from "./types";
+import CountryCard from "./CountryCard.vue";
 
 const { sdk } = defineProps<{ sdk: WidgetSDK }>();
 const props = ref<WidgetProps>(sdk.getProps());
 const unsubscribeProps = sdk.on("propsChanged", (newProps) => { props.value = newProps; });
 onUnmounted(unsubscribeProps);
 
+const TOP_COUNTRIES = 5;
 const countries = ref<Country[]>([]);
 const loading = ref(true);
 const error = ref<string | null>(null);
@@ -18,8 +20,8 @@ new window.WidgetServiceSDK().connectors
     if (cancelled) return;
     countries.value = [...raw]
       .sort((a, b) => b.population - a.population)
-      .slice(0, 5)
-      .map((c) => ({ name: c.name.common, capital: c.capital?.[0] ?? "N/A", population: c.population, flag: c.flags.png }));
+      .slice(0, TOP_COUNTRIES)
+      .map((c) => ({ name: c.name.common, capital: c.capital?.[0] ?? "N/A", population: c.population, flag: c.flags.png, region: c.region }));
     loading.value = false;
   })
   .catch((err: unknown) => {
@@ -29,23 +31,27 @@ new window.WidgetServiceSDK().connectors
   });
 
 onUnmounted(() => { cancelled = true; });
-
-const onFlagError = (e: Event) => {
-  if (e.target instanceof HTMLImageElement) e.target.style.display = "none";
-};
 </script>
 
 <template>
   <section class="vue-widget-section">
-    <h3 class="vue-widget-title">{{ props.title }}</h3>
-    <p v-if="loading" class="country-status">Loading…</p>
-    <p v-else-if="error" class="country-status country-error">{{ error }}</p>
+    <p class="widget-framework-header">{{ props.title ?? "" }}</p>
+    <div v-if="loading" role="status" aria-label="Loading country data">
+      <ul class="country-list">
+        <li v-for="n in TOP_COUNTRIES" :key="n" aria-hidden="true" class="country-item country-item--skeleton">
+          <div class="country-flag country-flag--skeleton" />
+          <div class="country-details">
+            <div class="country-skeleton-line country-skeleton-line--name" />
+            <div class="country-skeleton-line country-skeleton-line--meta" />
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div v-else-if="error" role="alert" class="country-error">
+      <p>{{ error }}</p>
+    </div>
     <ul v-else class="country-list">
-      <li v-for="c in countries" :key="c.name" class="country-item">
-        <img :src="c.flag" alt="" class="country-flag" @error="onFlagError" />
-        <span class="country-name">{{ c.name }}</span>
-        <span class="country-capital">{{ c.capital }}</span>
-      </li>
+      <CountryCard v-for="c in countries" :key="c.name" :country="c" />
     </ul>
   </section>
 </template>

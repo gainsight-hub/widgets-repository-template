@@ -1,5 +1,4 @@
 {
-  "version": "1.0.0",
   "title": "Countries Vue",
   "description": "A widget built with Vue and the Widget SDK.",
   "category": "Demo",
@@ -7,10 +6,6 @@
   "source": {
     "path": "dist",
     "entry": "index.html"
-  },
-  "settings": {
-    "shared": false,
-    "movable": false
   },
   "configuration": {
     "properties": [

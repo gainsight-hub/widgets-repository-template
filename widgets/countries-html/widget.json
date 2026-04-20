@@ -1,5 +1,4 @@
 {
-  "version": "1.0.0",
   "title": "Countries Html",
   "description": "A widget built with HTML and the Widget SDK.",
   "category": "Demo",
@@ -7,10 +6,6 @@
   "source": {
     "path": "dist",
     "entry": "content.html"
-  },
-  "settings": {
-    "shared": false,
-    "movable": false
   },
   "configuration": {
     "properties": [

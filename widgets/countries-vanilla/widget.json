@@ -1,5 +1,4 @@
 {
-  "version": "1.0.0",
   "title": "Countries Vanilla",
   "description": "A widget built with Vanilla JS and the Widget SDK.",
   "category": "Demo",
@@ -7,10 +6,6 @@
   "source": {
     "path": "dist",
     "entry": "index.html"
-  },
-  "settings": {
-    "shared": false,
-    "movable": false
   },
   "configuration": {
     "properties": [

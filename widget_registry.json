@@ -1,115 +1,10 @@
 {
   "widgets": [
     {
-      "type": "countries-react",
-      "title": "Countries React",
-      "description": "A widget built with React and the Widget SDK.",
-      "version": "1.0.0",
-      "category": "Demo",
-      "imageSrc": "widgets/countries-react/thumbnail.png",
-      "widgetsLibrary": true,
-      "containers": [
-        "Full width"
-      ],
-      "settings": {
-        "configurable": true,
-        "editable": true,
-        "removable": true,
-        "shared": false,
-        "movable": false
-      },
-      "source": {
-        "path": "widgets/countries-react/dist",
-        "entry": "index.html"
-      },
-      "configuration": {
-        "properties": [
-          {
-            "name": "title",
-            "type": "text",
-            "label": "Title",
-            "defaultValue": "Countries React",
-            "rules": {
-              "required": true
-            }
-          },
-          {
-            "name": "description",
-            "type": "text",
-            "label": "Description",
-            "defaultValue": "A widget built with React and the Widget SDK."
-          }
-        ]
-      },
-      "defaultConfig": {
-        "title": "Countries React",
-        "description": "A widget built with React and the Widget SDK."
-      }
-    },
-    {
-      "type": "countries-vue",
-      "title": "Countries Vue",
-      "description": "A widget built with Vue and the Widget SDK.",
-      "version": "1.0.0",
-      "category": "Demo",
-      "imageSrc": "widgets/countries-vue/thumbnail.png",
-      "widgetsLibrary": true,
-      "containers": [
-        "Full width"
-      ],
-      "settings": {
-        "configurable": true,
-        "editable": true,
-        "removable": true,
-        "shared": false,
-        "movable": false
-      },
-      "source": {
-        "path": "widgets/countries-vue/dist",
-        "entry": "index.html"
-      },
-      "configuration": {
-        "properties": [
-          {
-            "name": "title",
-            "type": "text",
-            "label": "Title",
-            "defaultValue": "Countries Vue",
-            "rules": {
-              "required": true
-            }
-          },
-          {
-            "name": "description",
-            "type": "text",
-            "label": "Description",
-            "defaultValue": "A widget built with Vue and the Widget SDK."
-          }
-        ]
-      },
-      "defaultConfig": {
-        "title": "Countries Vue",
-        "description": "A widget built with Vue and the Widget SDK."
-      }
-    },
-    {
-      "type": "countries-angular",
       "title": "Countries Angular",
       "description": "A widget built with Angular and the Widget SDK.",
-      "version": "1.0.0",
       "category": "Demo",
       "imageSrc": "widgets/countries-angular/thumbnail.png",
-      "widgetsLibrary": true,
-      "containers": [
-        "Full width"
-      ],
-      "settings": {
-        "configurable": true,
-        "editable": true,
-        "removable": true,
-        "shared": false,
-        "movable": false
-      },
       "source": {
         "path": "widgets/countries-angular/dist",
         "entry": "index.html"
@@ -136,72 +31,14 @@
       "defaultConfig": {
         "title": "Countries Angular",
         "description": "A widget built with Angular and the Widget SDK."
-      }
+      },
+      "type": "countries-angular"
     },
     {
-      "type": "countries-vanilla",
-      "title": "Countries Vanilla",
-      "description": "A widget built with Vanilla JS and the Widget SDK.",
-      "version": "1.0.0",
-      "category": "Demo",
-      "imageSrc": "widgets/countries-vanilla/thumbnail.png",
-      "widgetsLibrary": true,
-      "containers": [
-        "Full width"
-      ],
-      "settings": {
-        "configurable": true,
-        "editable": true,
-        "removable": true,
-        "shared": false,
-        "movable": false
-      },
-      "source": {
-        "path": "widgets/countries-vanilla/dist",
-        "entry": "index.html"
-      },
-      "configuration": {
-        "properties": [
-          {
-            "name": "title",
-            "type": "text",
-            "label": "Title",
-            "defaultValue": "Countries Vanilla",
-            "rules": {
-              "required": true
-            }
-          },
-          {
-            "name": "description",
-            "type": "text",
-            "label": "Description",
-            "defaultValue": "A widget built with Vanilla JS and the Widget SDK."
-          }
-        ]
-      },
-      "defaultConfig": {
-        "title": "Countries Vanilla",
-        "description": "A widget built with Vanilla JS and the Widget SDK."
-      }
-    },
-    {
-      "type": "countries-html",
       "title": "Countries Html",
       "description": "A widget built with HTML and the Widget SDK.",
-      "version": "1.0.0",
       "category": "Demo",
       "imageSrc": "widgets/countries-html/thumbnail.png",
-      "widgetsLibrary": true,
-      "containers": [
-        "Full width"
-      ],
-      "settings": {
-        "configurable": true,
-        "editable": true,
-        "removable": true,
-        "shared": false,
-        "movable": false
-      },
       "source": {
         "path": "widgets/countries-html/dist",
         "entry": "content.html"
@@ -228,7 +65,110 @@
       "defaultConfig": {
         "title": "Countries Html",
         "description": "A widget built with HTML and the Widget SDK."
-      }
+      },
+      "type": "countries-html"
+    },
+    {
+      "title": "Countries React",
+      "description": "A widget built with React and the Widget SDK.",
+      "category": "Demo",
+      "imageSrc": "widgets/countries-react/thumbnail.png",
+      "source": {
+        "path": "widgets/countries-react/dist",
+        "entry": "index.html"
+      },
+      "configuration": {
+        "properties": [
+          {
+            "name": "title",
+            "type": "text",
+            "label": "Title",
+            "defaultValue": "Countries React",
+            "rules": {
+              "required": true
+            }
+          },
+          {
+            "name": "description",
+            "type": "text",
+            "label": "Description",
+            "defaultValue": "A widget built with React and the Widget SDK."
+          }
+        ]
+      },
+      "defaultConfig": {
+        "title": "Countries React",
+        "description": "A widget built with React and the Widget SDK."
+      },
+      "type": "countries-react"
+    },
+    {
+      "title": "Countries Vanilla",
+      "description": "A widget built with Vanilla JS and the Widget SDK.",
+      "category": "Demo",
+      "imageSrc": "widgets/countries-vanilla/thumbnail.png",
+      "source": {
+        "path": "widgets/countries-vanilla/dist",
+        "entry": "index.html"
+      },
+      "configuration": {
+        "properties": [
+          {
+            "name": "title",
+            "type": "text",
+            "label": "Title",
+            "defaultValue": "Countries Vanilla",
+            "rules": {
+              "required": true
+            }
+          },
+          {
+            "name": "description",
+            "type": "text",
+            "label": "Description",
+            "defaultValue": "A widget built with Vanilla JS and the Widget SDK."
+          }
+        ]
+      },
+      "defaultConfig": {
+        "title": "Countries Vanilla",
+        "description": "A widget built with Vanilla JS and the Widget SDK."
+      },
+      "type": "countries-vanilla"
+    },
+    {
+      "title": "Countries Vue",
+      "description": "A widget built with Vue and the Widget SDK.",
+      "category": "Demo",
+      "imageSrc": "widgets/countries-vue/thumbnail.png",
+      "source": {
+        "path": "widgets/countries-vue/dist",
+        "entry": "index.html"
+      },
+      "configuration": {
+        "properties": [
+          {
+            "name": "title",
+            "type": "text",
+            "label": "Title",
+            "defaultValue": "Countries Vue",
+            "rules": {
+              "required": true
+            }
+          },
+          {
+            "name": "description",
+            "type": "text",
+            "label": "Description",
+            "defaultValue": "A widget built with Vue and the Widget SDK."
+          }
+        ]
+      },
+      "defaultConfig": {
+        "title": "Countries Vue",
+        "description": "A widget built with Vue and the Widget SDK."
+      },
+      "type": "countries-vue"
     }
   ],
   "stylesheets": [

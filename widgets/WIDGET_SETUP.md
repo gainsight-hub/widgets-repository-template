@@ -2,8 +2,8 @@
 
 > **Platform rules live online, not here.** This file covers only the local build tooling in this repository. For the `widget.json` schema, `content.html` rules, Shadow DOM behavior, the Widget SDK, configuration properties, template/variable handling, file limits, CSP, and publishing — always consult the authoritative docs:
 >
-> - **LLM-optimized full text**: https://developers.insided.com/docs/llms-full.txt
-> - **Human-readable**: https://developers.insided.com/docs
+> - **LLM-optimized full text**: https://developer-portal.gainsight.com/docs/llms-full.txt
+> - **Human-readable**: https://developer-portal.gainsight.com/docs
 
 ---
 

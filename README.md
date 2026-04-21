@@ -35,7 +35,7 @@ The template ships with working sample widgets and assets. Keep them as referenc
 
 This repo covers the local build tooling. The widget-service platform itself — the `widget.json` schema, the Widget SDK, connector authentication, the publishing pipeline, and everything else you need to actually build a widget — is documented at:
 
-**https://developers.insided.com/docs**
+**https://developer-portal.gainsight.com/docs**
 
 ## Repository layout
 

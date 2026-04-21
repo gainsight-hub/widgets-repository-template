@@ -2,8 +2,8 @@
 
 > **Platform rules live online, not here.** This file covers only the local build tooling in this repository. For the connector schema, authentication types, Jinja2 template variables, response transformation, SDK usage, and security rules — always consult the authoritative docs:
 >
-> - **LLM-optimized full text**: https://developers.insided.com/docs/llms-full.txt
-> - **Human-readable**: https://developers.insided.com/docs
+> - **LLM-optimized full text**: https://developer-portal.gainsight.com/docs/llms-full.txt
+> - **Human-readable**: https://developer-portal.gainsight.com/docs
 
 ---
 

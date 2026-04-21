@@ -15,8 +15,8 @@ Both are generated. Do not hand-edit them.
 
 Before writing or modifying any widget, connector, script, or stylesheet, fetch the current platform docs. This repo documents only the local build tooling; the platform's schemas, SDK, and rules live online.
 
-- LLM-optimized full text (start here): https://developers.insided.com/docs/llms-full.txt
-- Human docs: https://developers.insided.com/docs
+- LLM-optimized full text (start here): https://developer-portal.gainsight.com/docs/llms-full.txt
+- Human docs: https://developer-portal.gainsight.com/docs
 
 Topics that are intentionally **not** covered in this repo and must be read online: `widget.json` schema, `content.html` rules, Shadow DOM behavior, the Widget SDK (`sdk.getProps()`, `sdk.on('propsChanged')`, `sdk.$()`, `init(sdk)`, the canonical SDK script URL), configuration property types, connector authentication types, Jinja2 template variables, CSP restrictions, file and size limits, error codes, and the publishing pipeline. Do not answer from training data.
 

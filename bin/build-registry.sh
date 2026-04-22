@@ -31,6 +31,11 @@ SCRIPTS_DIR="scripts"
 OUTPUT_FILE="extensions_registry.json"
 CONNECTORS_OUTPUT_FILE="connectors_registry.json"
 
+# Default category applied to widgets whose widget.json omits "category".
+# Override: DEFAULT_WIDGET_CATEGORY=Foo ./bin/build-registry.sh
+# Strict mode: DEFAULT_WIDGET_CATEGORY= ./bin/build-registry.sh
+DEFAULT_WIDGET_CATEGORY="${DEFAULT_WIDGET_CATEGORY-Generic}"
+
 DRY_RUN=false
 VALIDATE_ONLY=false
 
@@ -51,6 +56,9 @@ while [[ $# -gt 0 ]]; do
       echo "  --dry-run    Preview the output without writing to file"
       echo "  --validate   Validate existing extensions_registry.json and connectors_registry.json"
       echo "  --help       Show this help message"
+      echo ""
+      echo "Environment:"
+      echo "  DEFAULT_WIDGET_CATEGORY   Category applied when widget.json omits 'category' (default: Generic; set empty to require explicit category)"
       exit 0
       ;;
     *)
@@ -228,9 +236,14 @@ for widget_dir in "$WIDGETS_DIR"/*; do
     continue
   fi
   if [ -z "$category" ]; then
-    error "  Missing required field: category"
-    ((error_count++))
-    continue
+    if [ -n "$DEFAULT_WIDGET_CATEGORY" ]; then
+      warning "  widget.json missing 'category'; applying default: $DEFAULT_WIDGET_CATEGORY"
+      category="$DEFAULT_WIDGET_CATEGORY"
+    else
+      error "  Missing required field: category (widget-service rejects widgets without a category; set DEFAULT_WIDGET_CATEGORY or add 'category' to widget.json)"
+      ((error_count++))
+      continue
+    fi
   fi
 
   has_source=$(jq 'if .source != null then true else false end' "$widget_config")
@@ -321,19 +334,21 @@ for widget_dir in "$WIDGETS_DIR"/*; do
 
     widget=$(jq \
       --arg type "$widget_name" \
+      --arg category "$category" \
       --arg repo_path "$repo_path" \
       --arg entry "$src_entry" \
       --arg image_src_resolved "$image_src_resolved" \
       '
-      . + { "type": $type, "source": { "path": $repo_path, "entry": $entry } }
+      . + { "type": $type, "category": $category, "source": { "path": $repo_path, "entry": $entry } }
       | if $image_src_resolved != "" then . + {"imageSrc": $image_src_resolved} | del(.imageName) else . end
       ' "$widget_config")
   else
     widget=$(jq \
       --arg type "$widget_name" \
+      --arg category "$category" \
       --arg image_src_resolved "$image_src_resolved" \
       '
-      . + { "type": $type }
+      . + { "type": $type, "category": $category }
       | if $image_src_resolved != "" then . + {"imageSrc": $image_src_resolved} | del(.imageName) else . end
       ' "$widget_config")
   fi

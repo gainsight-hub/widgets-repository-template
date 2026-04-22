@@ -246,6 +246,25 @@ for widget_dir in "$WIDGETS_DIR"/*; do
     fi
   fi
 
+  # configuration.properties must be an array of field definitions (widget-service rejects non-array shapes).
+  # Common mistake: writing it as a JSON-Schema-style object keyed by field name.
+  if jq -e '.configuration | has("properties")' "$widget_config" >/dev/null 2>&1; then
+    properties_type=$(jq -r '.configuration.properties | type' "$widget_config")
+    if [ "$properties_type" != "array" ]; then
+      error "  configuration.properties must be an array of field definitions, got: $properties_type"
+      if [ "$properties_type" = "object" ]; then
+        error "    Hint: use [ { \"name\": \"title\", \"type\": \"text\", \"label\": \"Title\" }, ... ]"
+        error "    instead of JSON-Schema style { \"title\": { ... } }."
+      fi
+      ((error_count++))
+      continue
+    fi
+  elif jq -e '.configuration' "$widget_config" >/dev/null 2>&1; then
+    error "  configuration block is present but missing required 'properties' array"
+    ((error_count++))
+    continue
+  fi
+
   has_source=$(jq 'if .source != null then true else false end' "$widget_config")
   has_content=$(jq 'if .content != null and (.content.endpoint | type == "string") and (.content.endpoint | startswith("http")) then true else false end' "$widget_config")
 

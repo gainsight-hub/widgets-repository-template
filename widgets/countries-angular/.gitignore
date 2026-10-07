@@ -1,6 +1,0 @@
-node_modules/
-.angular/
-out-tsc/
-package-lock.json
-dist/prerendered-routes.json
-dist/3rdpartylicenses.txt
